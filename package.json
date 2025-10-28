@@ -1,0 +1,60 @@
+{
+  "name": "el-crud-page",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A powerful CRUD page component library for Element UI v2",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "unpkg": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "demo": "vite",
+    "demo:build": "vite build",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "element-ui",
+    "vue",
+    "crud",
+    "table",
+    "form",
+    "component"
+  ],
+  "author": "tonwe",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tonwe/el-crud-page.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tonwe/el-crud-page/issues"
+  },
+  "homepage": "https://github.com/tonwe/el-crud-page#readme",
+  "peerDependencies": {
+    "element-ui": "^2.x",
+    "vue": "^2.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "@rollup/plugin-babel": "^6.0.0",
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@vitejs/plugin-vue2": "^2.3.1",
+    "@vue/babel-preset-jsx": "^1.4.0",
+    "element-ui": "^2.15.0",
+    "rollup": "^3.0.0",
+    "rollup-plugin-scss": "^4.0.0",
+    "rollup-plugin-vue": "^5.1.9",
+    "vite": "^5.0.0",
+    "vue": "^2.7.0",
+    "vue-template-compiler": "^2.7.0",
+    "sass": "^1.93.2"
+  }
+}
