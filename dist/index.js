@@ -25,9 +25,6 @@ function _arrayLikeToArray(r, a) {
   for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
   return n;
 }
-function _arrayWithHoles(r) {
-  if (Array.isArray(r)) return r;
-}
 function _arrayWithoutHoles(r) {
   if (Array.isArray(r)) return _arrayLikeToArray(r);
 }
@@ -66,36 +63,6 @@ function _defineProperty(e, r, t) {
 }
 function _iterableToArray(r) {
   if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r);
-}
-function _iterableToArrayLimit(r, l) {
-  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
-  if (null != t) {
-    var e,
-      n,
-      i,
-      u,
-      a = [],
-      f = !0,
-      o = !1;
-    try {
-      if (i = (t = t.call(r)).next, 0 === l) {
-        if (Object(t) !== t) return;
-        f = !1;
-      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
-    } catch (r) {
-      o = !0, n = r;
-    } finally {
-      try {
-        if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return;
-      } finally {
-        if (o) throw n;
-      }
-    }
-    return a;
-  }
-}
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -228,9 +195,6 @@ function _regeneratorDefine(e, r, n, t) {
       writable: !t
     }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, _regeneratorDefine(e, r, n, t);
-}
-function _slicedToArray(r, e) {
-  return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
 }
 function _toConsumableArray(r) {
   return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread();
@@ -1149,7 +1113,7 @@ TableColumn.components = {
 //
 //
 
-var script$5 = {
+var script$4 = {
   name: "CrudTable",
   components: {
     CrudTableColumn: TableColumn
@@ -1383,7 +1347,7 @@ function addStyle(id, css) {
 }
 
 /* script */
-var __vue_script__$5 = script$5;
+var __vue_script__$4 = script$4;
 
 /* template */
 var __vue_render__$4 = function __vue_render__() {
@@ -1396,8 +1360,9 @@ var __vue_render__$4 = function __vue_render__() {
     attrs: {
       data: _vm.data
     }
-  }, "el-table", _vm.combinedProps, false), _vm.combinedEvents), _vm._l(_vm.columns, function (column) {
+  }, "el-table", _vm.combinedProps, false), _vm.combinedEvents), _vm._l(_vm.columns, function (column, index) {
     return !column["v-hasPermi"] || !column["v-hasPermi"].length || _vm.$auth.hasPermiOr(column["v-hasPermi"] || []) ? _c("crud-table-column", {
+      key: "" + (column.key || "column_" + index),
       attrs: {
         indexMethod: function indexMethod(index) {
           return _vm.baseIndex + 1 + index;
@@ -1414,35 +1379,35 @@ var __vue_staticRenderFns__$4 = [];
 __vue_render__$4._withStripped = true;
 
 /* style */
-var __vue_inject_styles__$5 = function __vue_inject_styles__(inject) {
+var __vue_inject_styles__$4 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-eea78022_0", {
-    source: ".crud-table[data-v-eea78022] .el-table__body-wrapper .el-table__cell .cell:empty::after {\n  content: \"/\";\n  color: #c0c4cc;\n}\n\n/*# sourceMappingURL=table.vue.map */",
+  inject("data-v-8bcd2094_0", {
+    source: ".crud-table[data-v-8bcd2094] .el-table__body-wrapper .el-table__cell .cell:empty::after {\n  content: \"/\";\n  color: #c0c4cc;\n}\n\n/*# sourceMappingURL=table.vue.map */",
     map: {
       "version": 3,
       "sources": ["/Users/tonwe/git/el-crud-page/src/table.vue", "table.vue"],
       "names": [],
       "mappings": "AAsJA;EACA,YAAA;EACA,cAAA;ACrJA;;AAEA,oCAAoC",
       "file": "table.vue",
-      "sourcesContent": ["<!-- crud table 组件 -->\n<template>\n    <el-table :data=\"data\" class=\"crud-table\" ref=\"table\" v-bind=\"combinedProps\" v-on=\"combinedEvents\">\n        <crud-table-column v-for=\"column in columns\" :indexMethod=\"(index)=>( baseIndex + 1 + index )\"\n            v-if=\"!column[`v-hasPermi`] || !column[`v-hasPermi`].length || $auth.hasPermiOr(column[`v-hasPermi`] || [])\"\n            :column=\"column\" @action=\"onRowAction\">\n        </crud-table-column>\n    </el-table>\n</template>\n<script>\n\n\n/**\n * CRUD table组件\n */\n\nimport CrudTableColumn from \"./tableColumn.js\";\n\nexport default {\n    name: \"CrudTable\",\n    components: {\n        CrudTableColumn\n    },\n    inject: [\"crud\"],\n    props: {\n        columns: {\n            type: Array,\n            default: () => []\n        },\n        on: {\n            type: Object,\n            default: () => {\n                return {};\n            }\n        },\n        data: {\n            type: Array,\n            default: () => {\n                return [];\n            }\n        }\n    },\n    data() {\n        return {\n            emit: {},\n            defaultProps: {\n                stripe: true,\n                size: \"mini\",\n            }\n        };\n    },\n    computed: {\n        // 将外部传入的 props 与 crud 内部样式合并\n        combinedProps() {\n            return Object.assign({}, this.defaultProps, this.$attrs);\n        },\n        // 将各事件处理函数合并，包括 emit 与 on 上的回调\n        combinedEvents() {\n            return Object.assign(\n                {},\n                {\n                    \"selection-change\": this.onSelectionChange,\n                    \"sort-change\": this.onSortChange,\n                    \"row-contextmenu\": this.onRowContextMenu\n                },\n                this.emit,\n                this.on\n            );\n        },\n        baseIndex(){\n            if( this.crud?.pagination ){\n                return (this.crud?.pagination?.pageNum-1) * this.crud?.pagination?.pageSize;\n            }else{\n                return 0;\n            }\n        }\n    },\n    mounted() {\n        this.bindEmits();\n        this.bindMethods();\n    },\n    methods: {\n        // 绑定 el-table 回调\n        bindEmits() {\n            const emits = [\n                \"select\",\n                \"select-all\",\n                \"cell-mouse-enter\",\n                \"cell-mouse-leave\",\n                \"cell-click\",\n                \"cell-dblclick\",\n                \"row-click\",\n                \"row-contextmenu\",\n                \"row-dblclick\",\n                \"header-click\",\n                \"header-contextmenu\",\n                \"filter-change\",\n                \"current-change\",\n                \"header-dragend\",\n                \"expand-change\"\n            ];\n\n            emits.forEach((name) => {\n                this.emit[name] = (...args) => {\n                    this.$emit(name, ...args);\n                };\n            });\n        },\n\n        // 绑定 el-table 事件\n        bindMethods() {\n            const methods = [\n                \"clearSelection\",\n                \"toggleRowSelection\",\n                \"toggleAllSelection\",\n                \"toggleRowExpansion\",\n                \"setCurrentRow\",\n                \"clearSort\",\n                \"clearFilter\",\n                \"doLayout\",\n                \"sort\"\n            ];\n\n            methods.forEach((n) => {\n                this[n] = this.$refs[\"table\"][n];\n            });\n        },\n        onSelectionChange(selection) {\n            this.$emit(\"selection-change\", selection);\n        },\n        onSortChange({ prop, order }) {\n            this.$emit(\"sort-change\", { prop, order });\n        },\n        onRowContextMenu(row, column, event) {\n            this.$emit(\"row-contextmenu\", row, column, event);\n        },\n        onRowAction(action, scope) {\n            this.$emit(\"row-action\", action, scope);\n            this.$emit(`row-${action}`, scope);\n        }\n    }\n\n}\n</script>\n\n<style scoped lang=\"scss\">\n.crud-table {\n    &::v-deep {\n        .el-table__body-wrapper {\n            .el-table__cell {\n                .cell:empty::after {\n                    content: '/';\n                    color: #c0c4cc;\n                }\n            }\n        }\n    }\n}\n</style>\n", ".crud-table::v-deep .el-table__body-wrapper .el-table__cell .cell:empty::after {\n  content: \"/\";\n  color: #c0c4cc;\n}\n\n/*# sourceMappingURL=table.vue.map */"]
+      "sourcesContent": ["<!-- crud table 组件 -->\n<template>\n    <el-table :data=\"data\" class=\"crud-table\" ref=\"table\" v-bind=\"combinedProps\" v-on=\"combinedEvents\">\n        <crud-table-column v-for=\"(column,index) in columns\" :key=\"`${ column.key || ('column_'+index) }`\" :indexMethod=\"(index)=>( baseIndex + 1 + index )\"\n            v-if=\"!column[`v-hasPermi`] || !column[`v-hasPermi`].length || $auth.hasPermiOr(column[`v-hasPermi`] || [])\"\n            :column=\"column\" @action=\"onRowAction\">\n        </crud-table-column>\n    </el-table>\n</template>\n<script>\n\n\n/**\n * CRUD table组件\n */\n\nimport CrudTableColumn from \"./tableColumn.js\";\n\nexport default {\n    name: \"CrudTable\",\n    components: {\n        CrudTableColumn\n    },\n    inject: [\"crud\"],\n    props: {\n        columns: {\n            type: Array,\n            default: () => []\n        },\n        on: {\n            type: Object,\n            default: () => {\n                return {};\n            }\n        },\n        data: {\n            type: Array,\n            default: () => {\n                return [];\n            }\n        }\n    },\n    data() {\n        return {\n            emit: {},\n            defaultProps: {\n                stripe: true,\n                size: \"mini\",\n            }\n        };\n    },\n    computed: {\n        // 将外部传入的 props 与 crud 内部样式合并\n        combinedProps() {\n            return Object.assign({}, this.defaultProps, this.$attrs);\n        },\n        // 将各事件处理函数合并，包括 emit 与 on 上的回调\n        combinedEvents() {\n            return Object.assign(\n                {},\n                {\n                    \"selection-change\": this.onSelectionChange,\n                    \"sort-change\": this.onSortChange,\n                    \"row-contextmenu\": this.onRowContextMenu\n                },\n                this.emit,\n                this.on\n            );\n        },\n        baseIndex(){\n            if( this.crud?.pagination ){\n                return (this.crud?.pagination?.pageNum-1) * this.crud?.pagination?.pageSize;\n            }else{\n                return 0;\n            }\n        }\n    },\n    mounted() {\n        this.bindEmits();\n        this.bindMethods();\n    },\n    methods: {\n        // 绑定 el-table 回调\n        bindEmits() {\n            const emits = [\n                \"select\",\n                \"select-all\",\n                \"cell-mouse-enter\",\n                \"cell-mouse-leave\",\n                \"cell-click\",\n                \"cell-dblclick\",\n                \"row-click\",\n                \"row-contextmenu\",\n                \"row-dblclick\",\n                \"header-click\",\n                \"header-contextmenu\",\n                \"filter-change\",\n                \"current-change\",\n                \"header-dragend\",\n                \"expand-change\"\n            ];\n\n            emits.forEach((name) => {\n                this.emit[name] = (...args) => {\n                    this.$emit(name, ...args);\n                };\n            });\n        },\n\n        // 绑定 el-table 事件\n        bindMethods() {\n            const methods = [\n                \"clearSelection\",\n                \"toggleRowSelection\",\n                \"toggleAllSelection\",\n                \"toggleRowExpansion\",\n                \"setCurrentRow\",\n                \"clearSort\",\n                \"clearFilter\",\n                \"doLayout\",\n                \"sort\"\n            ];\n\n            methods.forEach((n) => {\n                this[n] = this.$refs[\"table\"][n];\n            });\n        },\n        onSelectionChange(selection) {\n            this.$emit(\"selection-change\", selection);\n        },\n        onSortChange({ prop, order }) {\n            this.$emit(\"sort-change\", { prop, order });\n        },\n        onRowContextMenu(row, column, event) {\n            this.$emit(\"row-contextmenu\", row, column, event);\n        },\n        onRowAction(action, scope) {\n            this.$emit(\"row-action\", action, scope);\n            this.$emit(`row-${action}`, scope);\n        }\n    }\n\n}\n</script>\n\n<style scoped lang=\"scss\">\n.crud-table {\n    &::v-deep {\n        .el-table__body-wrapper {\n            .el-table__cell {\n                .cell:empty::after {\n                    content: '/';\n                    color: #c0c4cc;\n                }\n            }\n        }\n    }\n}\n</style>\n", ".crud-table::v-deep .el-table__body-wrapper .el-table__cell .cell:empty::after {\n  content: \"/\";\n  color: #c0c4cc;\n}\n\n/*# sourceMappingURL=table.vue.map */"]
     },
     media: undefined
   });
 };
 /* scoped */
-var __vue_scope_id__$5 = "data-v-eea78022";
+var __vue_scope_id__$4 = "data-v-8bcd2094";
 /* module identifier */
-var __vue_module_identifier__$5 = undefined;
+var __vue_module_identifier__$4 = undefined;
 /* functional template */
-var __vue_is_functional_template__$5 = false;
+var __vue_is_functional_template__$4 = false;
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-var __vue_component__$5 = /*#__PURE__*/normalizeComponent({
+var __vue_component__$4 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$4,
   staticRenderFns: __vue_staticRenderFns__$4
-}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, createInjector, undefined, undefined);
+}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, createInjector, undefined, undefined);
 
 //
 //
@@ -1478,7 +1443,7 @@ var __vue_component__$5 = /*#__PURE__*/normalizeComponent({
 //
 //
 
-var script$4 = {
+var script$3 = {
   name: "RightToolbar",
   inject: ["crud"],
   data: function data() {
@@ -1584,7 +1549,7 @@ var script$4 = {
 };
 
 /* script */
-var __vue_script__$4 = script$4;
+var __vue_script__$3 = script$3;
 
 /* template */
 var __vue_render__$3 = function __vue_render__() {
@@ -1715,7 +1680,7 @@ var __vue_staticRenderFns__$3 = [];
 __vue_render__$3._withStripped = true;
 
 /* style */
-var __vue_inject_styles__$4 = function __vue_inject_styles__(inject) {
+var __vue_inject_styles__$3 = function __vue_inject_styles__(inject) {
   if (!inject) return;
   inject("data-v-d5778a5c_0", {
     source: "[data-v-d5778a5c] .el-transfer__button {\n  border-radius: 50%;\n  padding: 12px;\n  display: block;\n  margin-left: 0px;\n}\n[data-v-d5778a5c] .el-transfer__button:first-child {\n  margin-bottom: 10px;\n}\n.drag-item[data-v-d5778a5c] {\n  padding: 8px;\n  cursor: move;\n  border-bottom: 1px solid #ebeef5;\n  display: flex;\n  align-items: center;\n}\n.drag-item[data-v-d5778a5c]:hover {\n  background-color: #f5f7fa;\n}\n.drag-handle[data-v-d5778a5c] {\n  color: #909399;\n}\n.drag-handle[data-v-d5778a5c]:hover {\n  color: #409eff;\n}\n\n/*# sourceMappingURL=rightToolbar.vue.map */",
@@ -1731,21 +1696,21 @@ var __vue_inject_styles__$4 = function __vue_inject_styles__(inject) {
   });
 };
 /* scoped */
-var __vue_scope_id__$4 = "data-v-d5778a5c";
+var __vue_scope_id__$3 = "data-v-d5778a5c";
 /* module identifier */
-var __vue_module_identifier__$4 = undefined;
+var __vue_module_identifier__$3 = undefined;
 /* functional template */
-var __vue_is_functional_template__$4 = false;
+var __vue_is_functional_template__$3 = false;
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-var __vue_component__$4 = /*#__PURE__*/normalizeComponent({
+var __vue_component__$3 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$3,
   staticRenderFns: __vue_staticRenderFns__$3
-}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, createInjector, undefined, undefined);
+}, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, false, createInjector, undefined, undefined);
 
-var script$3 = {
+var script$2 = {
   props: {
     // queryParams: {
     //     type: Object,
@@ -1961,7 +1926,7 @@ var script$3 = {
 };
 
 /* script */
-var __vue_script__$3 = script$3;
+var __vue_script__$2 = script$2;
 
 /* template */
 var __vue_render__$2 = function __vue_render__() {
@@ -2011,7 +1976,7 @@ var __vue_render__$2 = function __vue_render__() {
           if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
             return null;
           }
-          return _vm.handleQuery.apply(null, arguments);
+          return _vm.handleQuery($event);
         }
       },
       model: {
@@ -2128,7 +2093,7 @@ var __vue_staticRenderFns__$2 = [];
 __vue_render__$2._withStripped = true;
 
 /* style */
-var __vue_inject_styles__$3 = function __vue_inject_styles__(inject) {
+var __vue_inject_styles__$2 = function __vue_inject_styles__(inject) {
   if (!inject) return;
   inject("data-v-ba1b80d0_0", {
     source: ".container-main[data-v-ba1b80d0] {\n  background-color: #fff;\n}\n.el-crud-query[data-v-ba1b80d0] {\n  overflow: hidden;\n  padding: 10px;\n}\n.el-crud-query .el-crud-query-form[data-v-ba1b80d0] {\n  margin-bottom: -10px;\n}\n.el-crud-query .el-crud-query-form[data-v-ba1b80d0] .el-form-item--mini.el-form-item, .el-crud-query .el-crud-query-form[data-v-ba1b80d0] .el-form-item--small.el-form-item {\n  margin-bottom: 10px;\n}\n\n/*# sourceMappingURL=queryForm.vue.map */",
@@ -2144,19 +2109,19 @@ var __vue_inject_styles__$3 = function __vue_inject_styles__(inject) {
   });
 };
 /* scoped */
-var __vue_scope_id__$3 = "data-v-ba1b80d0";
+var __vue_scope_id__$2 = "data-v-ba1b80d0";
 /* module identifier */
-var __vue_module_identifier__$3 = undefined;
+var __vue_module_identifier__$2 = undefined;
 /* functional template */
-var __vue_is_functional_template__$3 = false;
+var __vue_is_functional_template__$2 = false;
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-var __vue_component__$3 = /*#__PURE__*/normalizeComponent({
+var __vue_component__$2 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$2,
   staticRenderFns: __vue_staticRenderFns__$2
-}, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, false, createInjector, undefined, undefined);
+}, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, false, createInjector, undefined, undefined);
 
 //
 //
@@ -2176,7 +2141,7 @@ var __vue_component__$3 = /*#__PURE__*/normalizeComponent({
 //
 //
 
-var script$2 = {
+var script$1 = {
   name: 'Pagination',
   props: {
     total: {
@@ -2266,7 +2231,7 @@ var script$2 = {
 };
 
 /* script */
-var __vue_script__$2 = script$2;
+var __vue_script__$1 = script$1;
 
 /* template */
 var __vue_render__$1 = function __vue_render__() {
@@ -2310,7 +2275,7 @@ var __vue_staticRenderFns__$1 = [];
 __vue_render__$1._withStripped = true;
 
 /* style */
-var __vue_inject_styles__$2 = function __vue_inject_styles__(inject) {
+var __vue_inject_styles__$1 = function __vue_inject_styles__(inject) {
   if (!inject) return;
   inject("data-v-7ec7699b_0", {
     source: "\n.pagination-container[data-v-7ec7699b] {\n  background: #fff;\n  padding: 32px 16px;\n}\n.pagination-container.hidden[data-v-7ec7699b] {\n  display: none;\n}\n",
@@ -2326,26 +2291,26 @@ var __vue_inject_styles__$2 = function __vue_inject_styles__(inject) {
   });
 };
 /* scoped */
-var __vue_scope_id__$2 = "data-v-7ec7699b";
+var __vue_scope_id__$1 = "data-v-7ec7699b";
 /* module identifier */
-var __vue_module_identifier__$2 = undefined;
+var __vue_module_identifier__$1 = undefined;
 /* functional template */
-var __vue_is_functional_template__$2 = false;
+var __vue_is_functional_template__$1 = false;
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-var __vue_component__$2 = /*#__PURE__*/normalizeComponent({
+var __vue_component__$1 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$1,
   staticRenderFns: __vue_staticRenderFns__$1
-}, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, false, createInjector, undefined, undefined);
+}, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, createInjector, undefined, undefined);
 
-var script$1 = {
+var script = {
   components: {
-    CrudTable: __vue_component__$5,
-    RightToolbar: __vue_component__$4,
-    QueryForm: __vue_component__$3,
-    Pagination: __vue_component__$2
+    CrudTable: __vue_component__$4,
+    RightToolbar: __vue_component__$3,
+    QueryForm: __vue_component__$2,
+    Pagination: __vue_component__$1
   },
   name: 'Crud',
   provide: function provide() {
@@ -2656,7 +2621,7 @@ var script$1 = {
 };
 
 /* script */
-var __vue_script__$1 = script$1;
+var __vue_script__ = script;
 
 /* template */
 var __vue_render__ = function __vue_render__() {
@@ -2665,26 +2630,24 @@ var __vue_render__ = function __vue_render__() {
   var _c = _vm._self._c || _h;
   return _c("div", {
     staticClass: "el-crud"
-  }, [_vm._t("query", function () {
-    return [_vm.queryItems && _vm.queryItems.length ? _c("query-form", {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: _vm.showSearch,
-        expression: "showSearch"
-      }],
-      attrs: {
-        queryItems: _vm.queryItems,
-        lineClamp: _vm.queryLineClamp,
-        "label-width": _vm.queryLabelWidth,
-        "input-width": _vm.queryInputWidth,
-        inline: _vm.queryInline
-      },
-      on: {
-        queryTable: _vm.handleQuery
-      }
-    }) : _vm._e()];
-  }, {
+  }, [_vm._t("query", [_vm.queryItems && _vm.queryItems.length ? _c("query-form", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.showSearch,
+      expression: "showSearch"
+    }],
+    attrs: {
+      queryItems: _vm.queryItems,
+      lineClamp: _vm.queryLineClamp,
+      "label-width": _vm.queryLabelWidth,
+      "input-width": _vm.queryInputWidth,
+      inline: _vm.queryInline
+    },
+    on: {
+      queryTable: _vm.handleQuery
+    }
+  }) : _vm._e()], {
     queryItems: _vm.queryItems,
     lineClamp: _vm.queryLineClamp,
     labelWidth: _vm.queryLabelWidth,
@@ -2695,114 +2658,105 @@ var __vue_render__ = function __vue_render__() {
     "class": {
       pt5: _vm.tabPanes.length > 0
     }
-  }, [_vm._t("tabQuery", function () {
-    return [_vm.tabPanes.length > 0 ? _c("el-tabs", {
-      staticClass: "top-tab-query",
+  }, [_vm._t("tabQuery", [_vm.tabPanes.length > 0 ? _c("el-tabs", {
+    staticClass: "top-tab-query",
+    attrs: {
+      value: _vm.tabQuery.tabKey
+    },
+    on: {
+      "tab-click": _vm.handleTabClick
+    }
+  }, _vm._l(_vm.tabPanes, function (item) {
+    return _c("el-tab-pane", {
+      key: item.name,
       attrs: {
-        value: _vm.tabQuery.tabKey
-      },
-      on: {
-        "tab-click": _vm.handleTabClick
+        label: item.label,
+        name: item.name
       }
-    }, _vm._l(_vm.tabPanes, function (item) {
-      return _c("el-tab-pane", {
-        key: item.name,
-        attrs: {
-          label: item.label,
-          name: item.name
-        }
-      });
-    }), 1) : _vm._e()];
-  }), _vm._v(" "), _c("div", {
+    });
+  }), 1) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "flex justify-between el-crud-toolbar"
-  }, [_vm._t("buttons", function () {
-    return [_c("div", _vm._l(_vm.actionButtons, function (item) {
-      return _c("el-button", {
-        attrs: {
-          size: item.size,
-          plain: item.plain,
-          disabled: item.disabled,
-          type: item.type,
-          icon: item.icon
-        },
-        on: {
-          click: function click($event) {
-            return _vm.handleButtonClick(item);
-          }
-        }
-      }, [_vm._v(_vm._s(item.text))]);
-    }), 1)];
-  }, {
-    selections: _vm.selections
-  }), _vm._v(" "), _vm._t("toolbar", function () {
-    return [_c("right-toolbar", {
+  }, [_vm._t("buttons", [_c("div", _vm._l(_vm.actionButtons, function (item, index) {
+    return _c("el-button", {
+      key: "" + (item.key || "action-btn-" + index),
       attrs: {
-        showSearch: _vm.showSearch,
-        columns: _vm.columns,
-        search: !!(_vm.queryItems && _vm.queryItems.length)
+        size: item.size,
+        plain: item.plain,
+        disabled: item.disabled,
+        type: item.type,
+        icon: item.icon
       },
       on: {
-        "update:showSearch": function updateShowSearch($event) {
-          _vm.showSearch = $event;
-        },
-        "update:show-search": function updateShowSearch($event) {
-          _vm.showSearch = $event;
-        },
-        queryTable: _vm.refresh
+        click: function click($event) {
+          return _vm.handleButtonClick(item);
+        }
       }
-    })];
-  }, {
+    }, [_vm._v(_vm._s(item.text))]);
+  }), 1)], {
+    selections: _vm.selections
+  }), _vm._v(" "), _vm._t("toolbar", [_c("right-toolbar", {
+    attrs: {
+      showSearch: _vm.showSearch,
+      columns: _vm.columns,
+      search: !!(_vm.queryItems && _vm.queryItems.length)
+    },
+    on: {
+      "update:showSearch": function updateShowSearch($event) {
+        _vm.showSearch = $event;
+      },
+      "update:show-search": function updateShowSearch($event) {
+        _vm.showSearch = $event;
+      },
+      queryTable: _vm.refresh
+    }
+  })], {
     columns: _vm.columns,
     showSearch: _vm.showSearch
-  })], 2), _vm._v(" "), _vm._t("default", function () {
-    return [_c("crud-table", {
-      directives: [{
-        name: "loading",
-        rawName: "v-loading",
-        value: _vm.listLoading,
-        expression: "listLoading"
-      }],
-      attrs: {
-        size: "mini",
-        highlightCol: _vm.highlightCol,
-        resizable: _vm.resizable,
-        border: _vm.border,
-        columns: _vm.columns,
-        data: _vm.data,
-        "default-sort": _vm.defaultSort
-      },
-      on: {
-        "selection-change": _vm.handleSelectionChange,
-        "row-action": _vm.handleRowAction,
-        "sort-change": _vm.handleSortChange
-      }
-    })];
-  }, {
+  })], 2), _vm._v(" "), _vm._t("default", [_c("crud-table", {
+    directives: [{
+      name: "loading",
+      rawName: "v-loading",
+      value: _vm.listLoading,
+      expression: "listLoading"
+    }],
+    attrs: {
+      size: "mini",
+      highlightCol: _vm.highlightCol,
+      resizable: _vm.resizable,
+      border: _vm.border,
+      columns: _vm.columns,
+      data: _vm.data,
+      "default-sort": _vm.defaultSort
+    },
+    on: {
+      "selection-change": _vm.handleSelectionChange,
+      "row-action": _vm.handleRowAction,
+      "sort-change": _vm.handleSortChange
+    }
+  })], {
     data: _vm.data
-  }), _vm._v(" "), _vm._t("pagination", function () {
-    return [_c("pagination", {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: _vm.total > 0,
-        expression: "total > 0"
-      }],
-      attrs: {
-        total: _vm.total,
-        page: _vm.pagination.pageNum,
-        limit: _vm.pagination.pageSize
+  }), _vm._v(" "), _vm._t("pagination", [_c("pagination", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.total > 0,
+      expression: "total > 0"
+    }],
+    attrs: {
+      total: _vm.total,
+      page: _vm.pagination.pageNum,
+      limit: _vm.pagination.pageSize
+    },
+    on: {
+      "update:page": function updatePage($event) {
+        return _vm.$set(_vm.pagination, "pageNum", $event);
       },
-      on: {
-        "update:page": function updatePage($event) {
-          return _vm.$set(_vm.pagination, "pageNum", $event);
-        },
-        "update:limit": function updateLimit($event) {
-          return _vm.$set(_vm.pagination, "pageSize", $event);
-        },
-        pagination: _vm.refresh
-      }
-    })];
-  }, {
+      "update:limit": function updateLimit($event) {
+        return _vm.$set(_vm.pagination, "pageSize", $event);
+      },
+      pagination: _vm.refresh
+    }
+  })], {
     total: _vm.total,
     pagination: _vm.pagination
   })], 2)], 2);
@@ -2811,803 +2765,39 @@ var __vue_staticRenderFns__ = [];
 __vue_render__._withStripped = true;
 
 /* style */
-var __vue_inject_styles__$1 = function __vue_inject_styles__(inject) {
+var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-7449f835_0", {
-    source: ".top-tab-query[data-v-7449f835] {\n  margin-bottom: 10px;\n}\n.top-tab-query[data-v-7449f835] .el-tabs__header {\n  margin: 0;\n}\n\n/*# sourceMappingURL=index.vue.map */",
+  inject("data-v-35906918_0", {
+    source: ".top-tab-query[data-v-35906918] {\n  margin-bottom: 10px;\n}\n.top-tab-query[data-v-35906918] .el-tabs__header {\n  margin: 0;\n}\n\n/*# sourceMappingURL=index.vue.map */",
     map: {
       "version": 3,
       "sources": ["/Users/tonwe/git/el-crud-page/src/index.vue", "index.vue"],
       "names": [],
       "mappings": "AA2UA;EACA,mBAAA;AC1UA;AD6UA;EACA,SAAA;AC3UA;;AAEA,oCAAoC",
       "file": "index.vue",
-      "sourcesContent": ["<!-- crud组件 主要用于子组件的上下文传递 -->\n<!-- \n    搜索组件配置 queryItems 可配置\n    搜索及重置事件 queryTable \n     \n    切换组件配置 tabPanes 可配置\n    切换参数 tabQuery \n    \n    按钮组件配置 buttons 可配置\n    右侧工具条\n    表格列配置 columns 可配置\n    表格数据\n    分页数据\n -->\n<template>\n\n    <div class=\"el-crud\">\n        <!-- 搜索过滤插槽 -->\n        <slot name=\"query\" :queryItems=\"queryItems\" :lineClamp=\"queryLineClamp\" :labelWidth=\"queryLabelWidth\"\n            :inputWidth=\"queryInputWidth\" :inline=\"queryInline\">\n            <query-form v-show=\"showSearch\" v-if=\"queryItems && queryItems.length\" :queryItems=\"queryItems\"\n                :lineClamp=\"queryLineClamp\" :label-width=\"queryLabelWidth\" :input-width=\"queryInputWidth\" :inline=\"queryInline\"\n                @queryTable=\"handleQuery\" />\n        </slot>\n        <div class=\"container-main\" :class=\"{ pt5: tabPanes.length > 0 }\">\n            <slot name=\"tabQuery\">\n                <el-tabs class=\"top-tab-query\" v-if=\"tabPanes.length > 0\" :value=\"tabQuery.tabKey\"\n                    @tab-click=\"handleTabClick\">\n                    <el-tab-pane :label=\"item.label\" :name=\"item.name\" v-for=\"item in tabPanes\"\n                        :key=\"item.name\"></el-tab-pane>\n                </el-tabs>\n            </slot>\n            <!-- 工具条插槽 -->\n            <div class=\"flex justify-between el-crud-toolbar\">\n                <slot name=\"buttons\" :selections=\"selections\">\n                    <div>\n                        <el-button :size=\"item.size\" @click=\"handleButtonClick(item)\" v-for=\"item in actionButtons\"\n                            :plain=\"item.plain\" :disabled=\"item.disabled\" :type=\"item.type\" :icon=\"item.icon\">{{\n                                item.text\n                            }}</el-button>\n                    </div>\n                </slot>\n                <slot name=\"toolbar\" :columns=\"columns\" :showSearch=\"showSearch\">\n                    <right-toolbar :showSearch.sync=\"showSearch\" @queryTable=\"refresh\" :columns=\"columns\"\n                        :search=\"!!(queryItems && queryItems.length)\"></right-toolbar>\n                </slot>\n            </div>\n            <!-- 默认插槽 并传 data -->\n            <slot :data=\"data\">\n                <crud-table v-loading=\"listLoading\" size=\"mini\" @selection-change=\"handleSelectionChange\"\n                    :highlightCol=\"highlightCol\" :resizable=\"resizable\" :border=\"border\" :columns=\"columns\" :data=\"data\"\n                    @row-action=\"handleRowAction\" @sort-change=\"handleSortChange\"\n                    :default-sort=\"defaultSort\"></crud-table>\n            </slot>\n            <!-- 分页插槽 并传 total queryParams -->\n            <slot name=\"pagination\" :total=\"total\" :pagination=\"pagination\">\n                <pagination v-show=\"total > 0\" :total=\"total\" :page.sync=\"pagination.pageNum\"\n                    :limit.sync=\"pagination.pageSize\" @pagination=\"refresh\" />\n            </slot>\n        </div>\n\n    </div>\n\n</template>\n\n\n<script>\nimport CrudTable from \"./table.vue\";\nimport RightToolbar from \"./rightToolbar.vue\";\nimport QueryForm from \"./queryForm.vue\";\nimport Pagination from \"./pagination.vue\"\nimport { toLine } from \"./utils\";\n\nexport default {\n    components: {\n        CrudTable, RightToolbar, QueryForm, Pagination\n    },\n    name: 'Crud',\n    provide() {\n        return {\n            crud: this\n        };\n    },\n    props: {\n        queryParamsMethod: {\n            type: Function\n        },\n        columns: {\n            type: Array,\n            default: () => []\n        },\n        queryItems: {\n            type: Array,\n            default: () => []\n        },\n        queryLineClamp: {\n            type: Number,\n            default: 1\n        },\n        queryLabelWidth: {\n            type: Number,\n            default: 80\n        },\n        queryInputWidth: {\n            type: Number,\n            default: 210\n        },\n        queryInline: {\n            type: Boolean,\n            default: true\n        },\n        buttons: {\n            type: Array | Function,\n            default: () => []\n        },\n        tabPanes: {\n            type: Array,\n            default: () => []\n        },\n        defaultSort: {\n            type: Object,\n            default: () => {\n                return {\n                    prop: undefined,\n                    order: undefined\n                }\n            }\n        },\n        highlightCol: {\n            type: Boolean,\n            default: false\n        },\n        resizable: {\n            type: Boolean,\n            default: false\n        },\n        border: {\n            type: Boolean,\n            default: false\n        }\n    },\n    watch: {\n        tabPanes: {\n            handler(val) {\n                if (val.length) {\n\n                    this.tabQuery.tabKey = val[0].name\n                }\n            },\n            deep: true,\n            immediate: true\n        },\n        \"tabQuery.tabKey\": {\n            handler(val) {\n                this.$emit(\"tabChange\", val);\n            },\n\n        }\n    },\n    computed: {\n        actionButtons() {\n            let buts = this.buttons;\n            if (typeof buts === 'function') {\n                return buts(this.selections);\n            } else if (buts?.length) {\n                return buts\n            }\n            return []\n        }\n    },\n    data() {\n        return {\n            listLoading: false,\n            showSearch: true,\n            selections: [],\n            data: [],\n            service: { // 增删改查导出\n                add: null,\n                update: null,\n                delete: null,\n                page: null,\n                info: null,\n                list: null,\n                export: null,\n            }, // 服务\n            queryParams: {\n                // pageNum: 1,\n                // pageSize: 10\n            }, // 查询参数\n\n            tabQuery: {\n                tabKey: undefined\n            }, // 参数\n            filterParams: {}, // 过滤参数\n            pagination: {\n                pageNum: 1,\n                pageSize: 10\n            },\n            orderParams: {\n                orderByRowName: undefined,\n                orderByRule: undefined\n            },\n            total: 0,\n\n        }\n    },\n    created() {\n    },\n    methods: {\n        handleTabClick(tab) {\n            this.tabQuery.tabKey = tab.name\n            this.refresh()\n        },\n        handleSelectionChange(e) {\n            this.selections = e\n        },\n        handleQuery(query) {\n            this.queryParams = query;\n            this.refresh()\n        },\n        handleButtonClick(item) {\n            this.$emit(\"action\", item.action, this.selections);\n        },\n        handleRowAction(action, scope) {\n            this.$emit(\"row-action\", action, scope);\n            if (action === 'delete' && this.service.delete) {\n                this.delete(scope)\n            }\n        },\n        handleSortChange(column) {\n            this.orderParams.orderByRowName = toLine(column.prop);\n            if (column.order == \"descending\") {\n                this.orderParams.orderByRule = \"desc\";\n            } else if (column.order == \"ascending\") {\n                this.orderParams.orderByRule = \"asc\";\n            } else {\n                this.orderParams.orderByRule = undefined;\n                this.orderParams.orderByRowName = undefined;\n            }\n            this.refresh();\n        },\n        // 服务\n        setService(service) {\n            this.service = Object.assign(this.service, service);\n        },\n        // 设置列\n        setColumns(columns) {\n            this.columns = columns;\n        },\n        // 设置数据\n        setData(data) {\n            // this.crud.data = data;\n        },\n        // 获得查询参数\n        async getParams() {\n            const defaultSort = this.defaultSort;\n            let orderParams = this.orderParams;\n\n            if (!orderParams?.orderByRowName && defaultSort?.prop) {\n                const orderByRowName = toLine(defaultSort.prop);\n                let orderByRule = defaultSort.order;\n\n                if (defaultSort.order == \"descending\") {\n                    orderByRule = \"desc\";\n                } else if (defaultSort.order == \"ascending\") {\n                    orderByRule = \"asc\";\n                }\n\n                orderParams = {\n                    orderByRowName,\n                    orderByRule\n                }\n            }\n\n            let params = { ...this.queryParams, ...this.pagination, ...this.tabQuery, ...orderParams }\n\n\n\n            if (this.queryParamsMethod) {\n                return await this.queryParamsMethod(params);\n            }\n            return params;\n        },\n        // 刷新列表数据\n        async refresh() {\n            this.listLoading = true;\n            try {\n                const queryParams = await this.getParams();\n                const { code, rows, total } = await this.service.page(queryParams);\n                if (code === 200) {\n                    this.data = rows;\n                    this.total = total;\n                }\n\n            } catch (error) {\n                console.log(error);\n            }\n            this.listLoading = false;\n        },\n        // 删除\n        async delete({ row }) {\n            try {\n                let id = row?.id;\n                await this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {\n                    confirmButtonText: '确定',\n                    cancelButtonText: '取消',\n                    type: 'warning'\n                })\n                const { code } = await this.service.delete(id);\n                if (code === 200) {\n                    this.refresh();\n                    this.$message({\n                        type: 'success',\n                        message: '操作成功!'\n                    });\n                }\n            } catch (error) {\n                console.log(error);\n\n            }\n\n\n        }\n\n    }\n\n}\n\n</script>\n\n<style scoped lang=\"scss\">\n.top-tab-query {\n    margin-bottom: 10px;\n\n    &::v-deep {\n        .el-tabs__header {\n            margin: 0;\n        }\n    }\n}\n</style>", ".top-tab-query {\n  margin-bottom: 10px;\n}\n.top-tab-query::v-deep .el-tabs__header {\n  margin: 0;\n}\n\n/*# sourceMappingURL=index.vue.map */"]
+      "sourcesContent": ["<!-- crud组件 主要用于子组件的上下文传递 -->\n<!-- \n    搜索组件配置 queryItems 可配置\n    搜索及重置事件 queryTable \n     \n    切换组件配置 tabPanes 可配置\n    切换参数 tabQuery \n    \n    按钮组件配置 buttons 可配置\n    右侧工具条\n    表格列配置 columns 可配置\n    表格数据\n    分页数据\n -->\n<template>\n\n    <div class=\"el-crud\">\n        <!-- 搜索过滤插槽 -->\n        <slot name=\"query\" :queryItems=\"queryItems\" :lineClamp=\"queryLineClamp\" :labelWidth=\"queryLabelWidth\"\n            :inputWidth=\"queryInputWidth\" :inline=\"queryInline\">\n            <query-form v-show=\"showSearch\" v-if=\"queryItems && queryItems.length\" :queryItems=\"queryItems\"\n                :lineClamp=\"queryLineClamp\" :label-width=\"queryLabelWidth\" :input-width=\"queryInputWidth\" :inline=\"queryInline\"\n                @queryTable=\"handleQuery\" />\n        </slot>\n        <div class=\"container-main\" :class=\"{ pt5: tabPanes.length > 0 }\">\n            <slot name=\"tabQuery\">\n                <el-tabs class=\"top-tab-query\" v-if=\"tabPanes.length > 0\" :value=\"tabQuery.tabKey\"\n                    @tab-click=\"handleTabClick\">\n                    <el-tab-pane :label=\"item.label\" :name=\"item.name\" v-for=\"item in tabPanes\"\n                        :key=\"item.name\"></el-tab-pane>\n                </el-tabs>\n            </slot>\n            <!-- 工具条插槽 -->\n            <div class=\"flex justify-between el-crud-toolbar\">\n                <slot name=\"buttons\" :selections=\"selections\">\n                    <div>\n                        <el-button :size=\"item.size\" @click=\"handleButtonClick(item)\" v-for=\"(item,index) in actionButtons\" :key=\"`${item.key || ('action-btn-'+index)}`\"\n                            :plain=\"item.plain\" :disabled=\"item.disabled\" :type=\"item.type\" :icon=\"item.icon\">{{\n                                item.text\n                            }}</el-button>\n                    </div>\n                </slot>\n                <slot name=\"toolbar\" :columns=\"columns\" :showSearch=\"showSearch\">\n                    <right-toolbar :showSearch.sync=\"showSearch\" @queryTable=\"refresh\" :columns=\"columns\"\n                        :search=\"!!(queryItems && queryItems.length)\"></right-toolbar>\n                </slot>\n            </div>\n            <!-- 默认插槽 并传 data -->\n            <slot :data=\"data\">\n                <crud-table v-loading=\"listLoading\" size=\"mini\" @selection-change=\"handleSelectionChange\"\n                    :highlightCol=\"highlightCol\" :resizable=\"resizable\" :border=\"border\" :columns=\"columns\" :data=\"data\"\n                    @row-action=\"handleRowAction\" @sort-change=\"handleSortChange\"\n                    :default-sort=\"defaultSort\"></crud-table>\n            </slot>\n            <!-- 分页插槽 并传 total queryParams -->\n            <slot name=\"pagination\" :total=\"total\" :pagination=\"pagination\">\n                <pagination v-show=\"total > 0\" :total=\"total\" :page.sync=\"pagination.pageNum\"\n                    :limit.sync=\"pagination.pageSize\" @pagination=\"refresh\" />\n            </slot>\n        </div>\n\n    </div>\n\n</template>\n\n\n<script>\nimport CrudTable from \"./table.vue\";\nimport RightToolbar from \"./rightToolbar.vue\";\nimport QueryForm from \"./queryForm.vue\";\nimport Pagination from \"./pagination.vue\"\nimport { toLine } from \"./utils\";\n\nexport default {\n    components: {\n        CrudTable, RightToolbar, QueryForm, Pagination\n    },\n    name: 'Crud',\n    provide() {\n        return {\n            crud: this\n        };\n    },\n    props: {\n        queryParamsMethod: {\n            type: Function\n        },\n        columns: {\n            type: Array,\n            default: () => []\n        },\n        queryItems: {\n            type: Array,\n            default: () => []\n        },\n        queryLineClamp: {\n            type: Number,\n            default: 1\n        },\n        queryLabelWidth: {\n            type: Number,\n            default: 80\n        },\n        queryInputWidth: {\n            type: Number,\n            default: 210\n        },\n        queryInline: {\n            type: Boolean,\n            default: true\n        },\n        buttons: {\n            type: Array | Function,\n            default: () => []\n        },\n        tabPanes: {\n            type: Array,\n            default: () => []\n        },\n        defaultSort: {\n            type: Object,\n            default: () => {\n                return {\n                    prop: undefined,\n                    order: undefined\n                }\n            }\n        },\n        highlightCol: {\n            type: Boolean,\n            default: false\n        },\n        resizable: {\n            type: Boolean,\n            default: false\n        },\n        border: {\n            type: Boolean,\n            default: false\n        }\n    },\n    watch: {\n        tabPanes: {\n            handler(val) {\n                if (val.length) {\n\n                    this.tabQuery.tabKey = val[0].name\n                }\n            },\n            deep: true,\n            immediate: true\n        },\n        \"tabQuery.tabKey\": {\n            handler(val) {\n                this.$emit(\"tabChange\", val);\n            },\n\n        }\n    },\n    computed: {\n        actionButtons() {\n            let buts = this.buttons;\n            if (typeof buts === 'function') {\n                return buts(this.selections);\n            } else if (buts?.length) {\n                return buts\n            }\n            return []\n        }\n    },\n    data() {\n        return {\n            listLoading: false,\n            showSearch: true,\n            selections: [],\n            data: [],\n            service: { // 增删改查导出\n                add: null,\n                update: null,\n                delete: null,\n                page: null,\n                info: null,\n                list: null,\n                export: null,\n            }, // 服务\n            queryParams: {\n                // pageNum: 1,\n                // pageSize: 10\n            }, // 查询参数\n\n            tabQuery: {\n                tabKey: undefined\n            }, // 参数\n            filterParams: {}, // 过滤参数\n            pagination: {\n                pageNum: 1,\n                pageSize: 10\n            },\n            orderParams: {\n                orderByRowName: undefined,\n                orderByRule: undefined\n            },\n            total: 0,\n\n        }\n    },\n    created() {\n    },\n    methods: {\n        handleTabClick(tab) {\n            this.tabQuery.tabKey = tab.name\n            this.refresh()\n        },\n        handleSelectionChange(e) {\n            this.selections = e\n        },\n        handleQuery(query) {\n            this.queryParams = query;\n            this.refresh()\n        },\n        handleButtonClick(item) {\n            this.$emit(\"action\", item.action, this.selections);\n        },\n        handleRowAction(action, scope) {\n            this.$emit(\"row-action\", action, scope);\n            if (action === 'delete' && this.service.delete) {\n                this.delete(scope)\n            }\n        },\n        handleSortChange(column) {\n            this.orderParams.orderByRowName = toLine(column.prop);\n            if (column.order == \"descending\") {\n                this.orderParams.orderByRule = \"desc\";\n            } else if (column.order == \"ascending\") {\n                this.orderParams.orderByRule = \"asc\";\n            } else {\n                this.orderParams.orderByRule = undefined;\n                this.orderParams.orderByRowName = undefined;\n            }\n            this.refresh();\n        },\n        // 服务\n        setService(service) {\n            this.service = Object.assign(this.service, service);\n        },\n        // 设置列\n        setColumns(columns) {\n            this.columns = columns;\n        },\n        // 设置数据\n        setData(data) {\n            // this.crud.data = data;\n        },\n        // 获得查询参数\n        async getParams() {\n            const defaultSort = this.defaultSort;\n            let orderParams = this.orderParams;\n\n            if (!orderParams?.orderByRowName && defaultSort?.prop) {\n                const orderByRowName = toLine(defaultSort.prop);\n                let orderByRule = defaultSort.order;\n\n                if (defaultSort.order == \"descending\") {\n                    orderByRule = \"desc\";\n                } else if (defaultSort.order == \"ascending\") {\n                    orderByRule = \"asc\";\n                }\n\n                orderParams = {\n                    orderByRowName,\n                    orderByRule\n                }\n            }\n\n            let params = { ...this.queryParams, ...this.pagination, ...this.tabQuery, ...orderParams }\n\n\n\n            if (this.queryParamsMethod) {\n                return await this.queryParamsMethod(params);\n            }\n            return params;\n        },\n        // 刷新列表数据\n        async refresh() {\n            this.listLoading = true;\n            try {\n                const queryParams = await this.getParams();\n                const { code, rows, total } = await this.service.page(queryParams);\n                if (code === 200) {\n                    this.data = rows;\n                    this.total = total;\n                }\n\n            } catch (error) {\n                console.log(error);\n            }\n            this.listLoading = false;\n        },\n        // 删除\n        async delete({ row }) {\n            try {\n                let id = row?.id;\n                await this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {\n                    confirmButtonText: '确定',\n                    cancelButtonText: '取消',\n                    type: 'warning'\n                })\n                const { code } = await this.service.delete(id);\n                if (code === 200) {\n                    this.refresh();\n                    this.$message({\n                        type: 'success',\n                        message: '操作成功!'\n                    });\n                }\n            } catch (error) {\n                console.log(error);\n\n            }\n\n\n        }\n\n    }\n\n}\n\n</script>\n\n<style scoped lang=\"scss\">\n.top-tab-query {\n    margin-bottom: 10px;\n\n    &::v-deep {\n        .el-tabs__header {\n            margin: 0;\n        }\n    }\n}\n</style>", ".top-tab-query {\n  margin-bottom: 10px;\n}\n.top-tab-query::v-deep .el-tabs__header {\n  margin: 0;\n}\n\n/*# sourceMappingURL=index.vue.map */"]
     },
     media: undefined
   });
 };
 /* scoped */
-var __vue_scope_id__$1 = "data-v-7449f835";
-/* module identifier */
-var __vue_module_identifier__$1 = undefined;
-/* functional template */
-var __vue_is_functional_template__$1 = false;
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-var __vue_component__$1 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__,
-  staticRenderFns: __vue_staticRenderFns__
-}, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, createInjector, undefined, undefined);
-
-function getDefaultExportFromCjs (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
-}
-
-function _extends(){return _extends=Object.assign?Object.assign.bind():function(a){for(var b,c=1;c<arguments.length;c++)for(var d in b=arguments[c],b)Object.prototype.hasOwnProperty.call(b,d)&&(a[d]=b[d]);return a},_extends.apply(this,arguments)}var normalMerge=["attrs","props","domProps"],toArrayMerge=["class","style","directives"],functionalMerge=["on","nativeOn"],mergeJsxProps=function(a){return a.reduce(function(c,a){for(var b in a)if(!c[b])c[b]=a[b];else if(-1!==normalMerge.indexOf(b))c[b]=_extends({},c[b],a[b]);else if(-1!==toArrayMerge.indexOf(b)){var d=c[b]instanceof Array?c[b]:[c[b]],e=a[b]instanceof Array?a[b]:[a[b]];c[b]=[].concat(d,e);}else if(-1!==functionalMerge.indexOf(b)){for(var f in a[b])if(c[b][f]){var g=c[b][f]instanceof Array?c[b][f]:[c[b][f]],h=a[b][f]instanceof Array?a[b][f]:[a[b][f]];c[b][f]=[].concat(g,h);}else c[b][f]=a[b][f];}else if("hook"===b)for(var i in a[b])c[b][i]=c[b][i]?mergeFn(c[b][i],a[b][i]):a[b][i];else c[b]=a[b];return c},{})},mergeFn=function(a,b){return function(){a&&a.apply(this,arguments),b&&b.apply(this,arguments);}};var helper=mergeJsxProps;
-
-var _mergeJSXProps7 = /*@__PURE__*/getDefaultExportFromCjs(helper);
-
-var format = {
-  number: function number(value) {
-    var result;
-    if (isArray(value)) {
-      result = value.map(Number).map(function (item) {
-        return isNaN(item) ? undefined : item;
-      });
-    } else {
-      result = Number(value);
-      if (isNaN(result)) {
-        result = undefined;
-      }
-    }
-    return result;
-  },
-  string: function string(value) {
-    return isArray(value) ? value.map(String) : String(value);
-  },
-  split: function split(value) {
-    return isString(value) ? value.split(",").filter(Boolean) : value;
-  },
-  join: function join(value) {
-    return isArray(value) ? value.join(",") : value;
-  },
-  "boolean": function boolean(value) {
-    return Boolean(value);
-  },
-  booleanNumber: function booleanNumber(value) {
-    return Boolean(value) ? 1 : 0;
-  },
-  datetimerange: function datetimerange(value, form, method) {
-    if (method == "bind") {
-      return [form.startTime, form.endTime];
-    } else {
-      var _ref = value || [],
-        _ref2 = _slicedToArray(_ref, 2),
-        startTime = _ref2[0],
-        endTime = _ref2[1];
-      form.startTime = startTime;
-      form.endTime = endTime;
-      return undefined;
-    }
-  },
-  splitJoin: function splitJoin(value, _, method) {
-    if (method == "bind") {
-      return isString(value) ? value.split(",").filter(Boolean) : value;
-    } else {
-      return isArray(value) ? value.join(",") : value;
-    }
-  }
-};
-function parse(method, _ref3) {
-  var value = _ref3.value,
-    pipe = _ref3.pipe,
-    form = _ref3.form;
-  if (!pipe) {
-    return value;
-  }
-  var pipes = [];
-  if (isString(pipe)) {
-    if (format[pipe]) {
-      pipes = [pipe];
-    } else {
-      console.error("".concat(pipe, " is not found."));
-      return value;
-    }
-  } else if (isArray(pipe)) {
-    pipes = pipe;
-  } else if (isObject(pipe)) {
-    pipes = isArray(pipe[method]) ? pipe[method] : [pipe[method]];
-  } else if (isFunction(pipe)) {
-    pipes = [pipe];
-  } else {
-    console.error("Hook data error!");
-    return value;
-  }
-  var d = value;
-  pipes.forEach(function (e) {
-    if (isString(e)) {
-      d = format[e](d, form, method);
-    } else if (isFunction(e)) {
-      d = e(d, form);
-    }
-  });
-  return d;
-}
-var valueHook = {
-  bind: function bind(value, pipe, form) {
-    return parse("bind", {
-      value: value,
-      pipe: pipe,
-      form: form
-    });
-  },
-  submit: function submit(value, pipe, form) {
-    return parse("submit", {
-      value: value,
-      pipe: pipe,
-      form: form
-    });
-  }
-};
-
-// type FormItems = { // 表单项配置
-//     label: string; // 标签
-//     prop: string; // 字段名
-
-//     options?: { value: string; label: string; disabled?: boolean }[] || ()=>[]; // 字典数据
-//     rules?: any[]; // 验证规则
-
-//     children?: FormItems[];
-//     hidden?: boolean; // 是否隐藏
-//     help?: string; // 帮助信息
-
-//     span?: number; // 栅格占据的列数
-//     labelWidth?: string; // formitem 标签宽度 
-
-//     component?: VNode;
-// };
-// type VNodeFunction = ({ scope,h }) => VNode | ({ scope,h }) =><div>{ scope }</div> | <div />;
-
-// type VNodeObject = { 
-//     name?: string | Component; // 组件名 | 组件引用
-//     options?: any[]; // 选项
-//     attrs?: any; // 属性
-//     on?: any; // 事件
-//     props?: any; // 属性
-//     [key: string]: any;
-// };
-// type VNode = string | VNodeFunction | VNodeObject;
-
-var script = {
-  props: {
-    // 表单配置项，可以从外部传入
-    formItems: {
-      type: Array,
-      "default": function _default() {
-        return [];
-      }
-    },
-    // 初始表单数据
-    initialFormData: {
-      type: Object,
-      "default": function _default() {
-        return {};
-      }
-    },
-    // 按钮配置
-    buttons: {
-      type: Object,
-      "default": function _default() {
-        return {
-          submit: {
-            show: true,
-            text: '提交',
-            type: 'primary',
-            loading: false
-          },
-          cancel: {
-            show: true,
-            text: '取消',
-            type: 'default'
-          }
-        };
-      }
-    },
-    // 按钮位置
-    buttonPosition: {
-      type: String,
-      "default": 'right',
-      // center, left, right
-      validator: function validator(value) {
-        return ['center', 'left', 'right'].includes(value);
-      }
-    },
-    // 是否显示按钮区域
-    showButtons: {
-      type: Boolean,
-      "default": true
-    },
-    readonly: {
-      type: Boolean
-    },
-    labelWidth: {
-      type: String,
-      "default": '80px'
-    },
-    column: {
-      type: Number,
-      "default": 2
-    },
-    gutter: {
-      type: Number,
-      "default": 10
-    },
-    size: {
-      type: String,
-      "default": 'small'
-    }
-    // value: {
-    //     type: Object,
-    //     default: () => ({})
-    // },
-  },
-  data: function data() {
-    return {
-      form: {},
-      // 如果没有传入formItems，则使用默认配置
-      items: [],
-      activeName: 'first',
-      submitLoading: false
-    };
-  },
-  computed: {
-    // 从items中提取所有字段的规则
-    formRules: function formRules() {
-      var rules = {};
-
-      // 递归提取规则函数
-      var _extractRules = function extractRules(nodes) {
-        if (!nodes || !nodes.length) return;
-        nodes.forEach(function (node) {
-          // 如果节点有children，递归处理
-          if (node.children && node.children.length) {
-            _extractRules(node.children);
-          }
-
-          // 如果是表单字段且有规则，添加到规则对象
-          if (node.prop && node.rules) {
-            rules[node.prop] = node.rules;
-          }
-        });
-      };
-
-      // 对所有配置项提取规则
-      _extractRules(this.items);
-      return rules;
-    },
-    // 按钮区域样式
-    buttonAreaStyle: function buttonAreaStyle() {
-      return {
-        textAlign: this.buttonPosition,
-        marginTop: '20px'
-      };
-    },
-    // label宽度
-    labelStyle: function labelStyle() {
-      return {
-        width: this.labelWidth,
-        textAlign: 'center'
-      };
-    }
-  },
-  watch: {
-    // 监听外部传入的表单数据变化
-    initialFormData: {
-      handler: function handler(val) {
-        this.form = JSON.parse(JSON.stringify(val));
-      },
-      immediate: true,
-      deep: true
-    },
-    // 监听外部传入的表单配置变化
-    formItems: {
-      handler: function handler(val) {
-        if (val && val.length) {
-          this.items = val;
-        }
-      },
-      immediate: true,
-      deep: true
-    },
-    // 监听外部传入的value变化
-    // value: {
-    //     handler(val) {
-    //         this.form = JSON.parse(JSON.stringify(val)) || {};
-    //     },
-    //     immediate: true,
-    //     deep: true
-    // },
-    // v-model绑定的值变化时，更新表单数据
-    form: {
-      handler: function handler(val) {
-        this.$emit('input', val);
-      },
-      deep: true
-    }
-  },
-  methods: {
-    // 处理表单输入事件
-    handleInput: function handleInput(prop, value) {
-      this.$set(this.form, prop, value);
-      // 触发change事件，将变更通知给父组件
-      this.$emit('field-change', {
-        prop: prop,
-        value: value,
-        form: this.form
-      });
-    },
-    // 递归渲染函数 - 根据节点类型渲染不同内容
-    renderNode: function renderNode(node, index) {
-      // 如果是只读模式，使用只读渲染函数
-      if (this.readonly) {
-        return this.renderReadOnlyNode(node, index);
-      }
-
-      // 如果是输入字段（没有type或没有children，则视为字段）
-      if (!node.type || !node.children && node.prop) {
-        return this.renderField(node, index);
-      }
-
-      // 根据节点类型渲染
-      switch (node.type) {
-        case 'tab':
-          return this.renderTab(node, index);
-        case 'group':
-          return this.renderGroup(node, index);
-        default:
-          // 默认当作字段渲染
-          return this.renderField(node, index);
-      }
-    },
-    // 只读模式 - 递归渲染函数
-    renderReadOnlyNode: function renderReadOnlyNode(node, index) {
-      if (!node.type || !node.children && node.prop) {
-        return this.renderReadOnlyField(node, index);
-      }
-      switch (node.type) {
-        case 'tab':
-          return this.renderReadOnlyTab(node, index);
-        case 'group':
-          return this.renderReadOnlyGroup(node, index);
-        default:
-          return this.renderReadOnlyField(node, index);
-      }
-    },
-    // 只读模式 - 渲染标签页
-    renderReadOnlyTab: function renderReadOnlyTab(tab, index) {
-      var h = this.$createElement;
-      return h("el-tab-pane", _mergeJSXProps7([{
-        "key": tab.name || index,
-        "attrs": {
-          "label": tab.label,
-          "name": tab.name || index
-        }
-      }, tab.props]), [this.renderReadOnlyChildren(tab.children)]);
-    },
-    // 只读模式 - 渲染分组
-    renderReadOnlyGroup: function renderReadOnlyGroup(group, index) {
-      var h = this.$createElement;
-      return h("div", _mergeJSXProps7([{
-        "class": ['el-form-group', group.className],
-        "key": index
-      }, group.props]), [h("el-descriptions", {
-        "attrs": {
-          "title": group.title,
-          "border": true,
-          "column": this.column,
-          "size": this.size,
-          "labelStyle": this.labelStyle
-        }
-      }, [this.renderReadOnlyDescriptionItems(group.children)])]);
-    },
-    // 只读模式 - 渲染字段
-    renderReadOnlyField: function renderReadOnlyField(field, index) {
-      var h = this.$createElement;
-      // 如果字段被配置为隐藏，则不渲染
-      if (field.hidden) {
-        return null;
-      }
-
-      // 获取字段值
-      var value = this.form[field.prop];
-
-      // 处理显示值
-      var displayValue = value;
-
-      // 处理不同类型的字段显示值
-      if (field.options && Array.isArray(field.options)) {
-        var option = field.options.find(function (opt) {
-          return opt.value === value;
-        });
-        if (option) {
-          displayValue = option.label;
-        }
-      }
-
-      // 如果处于顶层（不在group内），则需要包装在el-descriptions中
-      if (!field._inGroup) {
-        return h("el-col", {
-          "attrs": {
-            "span": 24 / this.column || field.span || 12
-          },
-          "key": field.prop || index
-        }, [h("el-descriptions", {
-          "attrs": {
-            "labelStyle": this.labelStyle,
-            "border": true,
-            "column": this.column,
-            "size": this.size
-          }
-        }, [h("el-descriptions-item", {
-          "attrs": {
-            "label": field.label || ''
-          }
-        }, [displayValue || '-'])])]);
-      }
-      // 在group内部的字段直接返回
-      return h("el-descriptions-item", {
-        "attrs": {
-          "label": field.label || ''
-        }
-      }, [displayValue || '-']);
-    },
-    // 只读模式 - 渲染描述项
-    renderReadOnlyDescriptionItems: function renderReadOnlyDescriptionItems(children) {
-      var _this = this;
-      if (!children || !children.length) {
-        return null;
-      }
-      return children.map(function (child) {
-        // 标记字段在group内部
-        child._inGroup = true;
-        return _this.renderReadOnlyField(child);
-      });
-    },
-    // 只读模式 - 渲染子节点
-    renderReadOnlyChildren: function renderReadOnlyChildren(children) {
-      var _this2 = this;
-      var h = this.$createElement;
-      // 如果没有子节点，返回空
-      if (!children || !children.length) {
-        return null;
-      }
-
-      // 检查第一个子节点类型，判断是否需要包装
-      var firstChild = children[0];
-
-      // 如果第一个子节点是group，不需要额外包装
-      if (firstChild.type === 'group') {
-        return children.map(function (child, index) {
-          return _this2.renderReadOnlyNode(child, index);
-        });
-      }
-
-      // 如果子节点不是输入字段，也不是分组，则直接渲染
-      if (firstChild.type && firstChild.type !== 'group' && !firstChild.prop) {
-        return children.map(function (child, index) {
-          return _this2.renderReadOnlyNode(child, index);
-        });
-      }
-
-      // 如果是普通字段（非group），则包装在el-descriptions中
-      return h("el-descriptions", {
-        "attrs": {
-          "border": true,
-          "column": this.column,
-          "size": this.size,
-          "labelStyle": this.labelStyle
-        }
-      }, [children.map(function (child, index) {
-        child._inGroup = true;
-        return _this2.renderReadOnlyNode(child, index);
-      })]);
-    },
-    // 渲染标签页
-    renderTab: function renderTab(tab, index) {
-      var h = this.$createElement;
-      return h("el-tab-pane", _mergeJSXProps7([{
-        "key": tab.name || index,
-        "attrs": {
-          "label": tab.label,
-          "name": tab.name || index
-        }
-      }, tab.props]), [this.renderChildren(tab.children)]);
-    },
-    // 渲染分组
-    renderGroup: function renderGroup(group, index) {
-      var h = this.$createElement;
-      return h("div", _mergeJSXProps7([{
-        "class": ['el-form-group', group.className],
-        "key": index
-      }, group.props]), [group.title && h("div", {
-        "class": "el-form-group__title"
-      }, [group.title]), h("div", [this.renderChildren(group.children)])]);
-    },
-    // 渲染各种表单控件
-    renderFormControl: function renderFormControl(field) {
-      var _field$hook;
-      var component = field.component;
-      if (isString(field.component)) {
-        component = {
-          name: field.component,
-          attrs: {
-            placeholder: field.placeholder || "\u8BF7\u8F93\u5165".concat(field.label),
-            clearable: typeof field.clearable !== 'undefined' ? field.clearable : true
-          }
-        };
-      }
-      if (!isFunction(field.component)) {
-        if (field.component === 'el-select') {
-          component.attrs = _objectSpread2(_objectSpread2({}, component.attrs), {}, {
-            placeholder: field.placeholder || "\u8BF7\u9009\u62E9".concat(field.label),
-            filterable: true
-          });
-        }
-      }
-      if ((_field$hook = field.hook) !== null && _field$hook !== void 0 && (_field$hook = _field$hook.bind) !== null && _field$hook !== void 0 && _field$hook.length) {
-        var _field$hook2;
-        var value = valueHook.bind(this.form[field.prop], (_field$hook2 = field.hook) === null || _field$hook2 === void 0 ? void 0 : _field$hook2.bind, this.form);
-        this.$set(this.form, field.prop, value);
-      }
-      // component 渲染 { prop: this.column.prop, scope: scope }
-      return renderNode.call(this, component, {
-        prop: field.prop,
-        scope: this.form
-      });
-    },
-    // 渲染字段
-    renderField: function renderField(field, index) {
-      var h = this.$createElement;
-      // 如果字段被配置为隐藏，则不渲染
-      if (field.hidden) {
-        return null;
-      }
-      return h("el-col", {
-        "attrs": {
-          "span": 24 / this.column || field.span || 12
-        },
-        "key": field.prop || index
-      }, [h("el-form-item", _mergeJSXProps7([{
-        "attrs": {
-          "label": field.label,
-          "prop": field.prop,
-          "rules": field.rules,
-          "labelWidth": field.labelWidth || this.labelWidth
-        }
-      }, field.formItemProps]), [this.renderFormControl(field), field.help && h("div", {
-        "class": "form-item-help"
-      }, [field.help])])]);
-    },
-    // 渲染子节点
-    renderChildren: function renderChildren(children) {
-      var h = this.$createElement;
-      // 如果没有子节点，返回空
-      if (!children || !children.length) {
-        return null;
-      }
-
-      // 检查第一个子节点类型，判断是否需要包装
-      var firstChild = children[0];
-
-      // 如果第一个子节点是group，不需要额外包装
-      if (firstChild.type === 'group') {
-        return children.map(this.renderNode);
-      }
-
-      // 如果子节点不是输入字段，也不是分组，则直接渲染
-      if (firstChild.type && firstChild.type !== 'group' && !firstChild.prop) {
-        return children.map(this.renderNode);
-      }
-
-      // 其他情况（子节点是输入字段）包装在row中
-      return h("el-row", {
-        "attrs": {
-          "gutter": this.gutter
-        }
-      }, [children.map(this.renderNode)]);
-    },
-    // 判断是否有标签页
-    hasTabs: function hasTabs() {
-      return this.items && this.items.some(function (item) {
-        return item.type === 'tab';
-      });
-    },
-    // 渲染按钮区域
-    renderButtons: function renderButtons() {
-      var h = this.$createElement;
-      if (!this.showButtons || this.readonly) return null;
-      return h("div", {
-        "class": "form-button-area",
-        "style": this.buttonAreaStyle
-      }, [this.buttons.cancel && this.buttons.cancel.show && h("el-button", _mergeJSXProps7([{
-        "on": {
-          "click": this.handleCancel
-        },
-        "attrs": {
-          "type": this.buttons.cancel.type
-        }
-      }, this.buttons.cancel.props]), [this.buttons.cancel.text]), this.buttons.submit && this.buttons.submit.show && h("el-button", _mergeJSXProps7([{
-        "on": {
-          "click": this.handleSubmit
-        },
-        "attrs": {
-          "type": this.buttons.submit.type,
-          "loading": this.submitLoading || this.buttons.submit.loading
-        }
-      }, this.buttons.submit.props]), [this.buttons.submit.text])]);
-    },
-    // 处理提交
-    handleSubmit: function handleSubmit() {
-      var _this3 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var formData, _t;
-        return _regenerator().w(function (_context) {
-          while (1) switch (_context.p = _context.n) {
-            case 0:
-              _context.p = 0;
-              _this3.submitLoading = true;
-              // 表单验证
-              _context.n = 1;
-              return _this3.validate();
-            case 1:
-              formData = _context.v;
-              // 发出提交事件
-              _this3.$emit('submit', formData);
-
-              // return formData;
-              _context.n = 3;
-              break;
-            case 2:
-              _context.p = 2;
-              _t = _context.v;
-              _this3.$emit('submit-error', _t);
-              return _context.a(2, Promise.reject(_t));
-            case 3:
-              _this3.submitLoading = false;
-            case 4:
-              return _context.a(2);
-          }
-        }, _callee, null, [[0, 2]]);
-      }))();
-    },
-    // 处理取消
-    handleCancel: function handleCancel() {
-      this.$emit('cancel');
-    },
-    // 表单验证方法
-    validate: function validate() {
-      var _this4 = this;
-      return new Promise(function (resolve, reject) {
-        _this4.$refs.form.validate(function (valid) {
-          if (valid) {
-            resolve(_this4.form);
-          } else {
-            reject(new Error('表单验证失败'));
-          }
-        });
-      });
-    },
-    // 重置表单
-    resetForm: function resetForm() {
-      this.form = JSON.parse(JSON.stringify(this.initialFormData)) || {};
-      this.$refs.form.resetFields();
-      this.$emit('form-reset', this.form);
-    },
-    // 获取表单数据
-    getFormData: function getFormData() {
-      return this.form;
-    }
-  },
-  render: function render() {
-    var _this5 = this;
-    var h = arguments[0];
-    if (this.readonly) {
-      // 只读模式渲染
-      return h("div", {
-        "class": "dynamic-form-container readonly"
-      }, [this.hasTabs() ? // 渲染标签页结构
-      h("el-tabs", {
-        "directives": [{
-          name: "on",
-          value: this.$listeners
-        }],
-        "model": {
-          value: _this5.activeName,
-          callback: function callback($$v) {
-            _this5.activeName = $$v;
-          }
-        }
-      }, [this.items.map(function (item, index) {
-        return _this5.renderReadOnlyNode(item, index);
-      })]) :
-      // 非标签页结构，直接渲染
-      this.renderReadOnlyChildren(this.items)]);
-    }
-    var formProps = _objectSpread2({
-      model: this.form,
-      rules: this.formRules
-    }, this.$attrs);
-    // 如果没有配置项，渲染空表单
-    if (!this.items || !this.items.length) {
-      return h("div", {
-        "class": "dynamic-form-container"
-      }, [h("el-form", {
-        "ref": "form",
-        "props": _objectSpread2({}, formProps)
-      })]);
-    }
-    return h("div", {
-      "class": "dynamic-form-container"
-    }, [h("el-form", {
-      "ref": "form",
-      "props": _objectSpread2({}, formProps)
-    }, [this.hasTabs() ? // 渲染标签页结构
-    h("el-tabs", {
-      "directives": [{
-        name: "on",
-        value: this.$listeners
-      }],
-      "model": {
-        value: _this5.activeName,
-        callback: function callback($$v) {
-          _this5.activeName = $$v;
-        }
-      }
-    }, [this.items.map(this.renderNode)]) :
-    // 非标签页结构，直接渲染
-    this.renderChildren(this.items), this.renderButtons()])]);
-  }
-};
-
-/* script */
-var __vue_script__ = script;
-
-/* template */
-
-/* style */
-var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
-  if (!inject) return;
-  inject("data-v-ef86d32c_0", {
-    source: "@charset \"UTF-8\";\n.dynamic-form-container[data-v-ef86d32c] {\n  padding: 20px;\n}\n.dynamic-form-container .el-form .el-form-item[data-v-ef86d32c] .el-input,\n.dynamic-form-container .el-form .el-form-item[data-v-ef86d32c] .el-select {\n  width: 100%;\n}\n.dynamic-form-container .el-form .el-form-item[data-v-ef86d32c] .el-input__inner {\n  width: 100%;\n}\n.el-form-group[data-v-ef86d32c] {\n  margin-bottom: 20px;\n  /* padding: 15px; */\n  border-bottom: 1px solid #ebeef5;\n}\n.el-form-group__title[data-v-ef86d32c] {\n  font-weight: bold;\n  margin-bottom: 15px;\n  font-size: 14px;\n  color: #606266;\n}\n.form-button-area[data-v-ef86d32c] {\n  padding-top: 10px;\n  border-top: 1px solid #ebeef5;\n}\n.form-button-area .el-button + .el-button[data-v-ef86d32c] {\n  margin-left: 10px;\n}\n\n/* 只读模式样式 */\n.dynamic-form-container.readonly .el-descriptions__body[data-v-ef86d32c] {\n  background-color: #fafafa;\n}\n.dynamic-form-container.readonly .el-descriptions-item__label[data-v-ef86d32c] {\n  font-weight: bold;\n}\n.dynamic-form-container.readonly .el-descriptions-item__content[data-v-ef86d32c] {\n  word-break: break-all;\n}\n\n/*# sourceMappingURL=form.vue.map */",
-    map: {
-      "version": 3,
-      "sources": ["form.vue", "/Users/tonwe/git/el-crud-page/src/form.vue"],
-      "names": [],
-      "mappings": "AAAA,gBAAgB;ACqlBhB;EACA,aAAA;ADnlBA;AC2lBA;;EAEA,WAAA;ADzlBA;AC2lBA;EACA,WAAA;ADzlBA;AComBA;EACA,mBAAA;EACA,mBAAA;EACA,gCAAA;ADjmBA;AComBA;EACA,iBAAA;EACA,mBAAA;EACA,eAAA;EACA,cAAA;ADjmBA;AComBA;EACA,iBAAA;EACA,6BAAA;ADjmBA;AComBA;EACA,iBAAA;ADjmBA;;AComBA,WAAA;AAEA;EACA,yBAAA;ADlmBA;ACqmBA;EACA,iBAAA;ADnmBA;ACsmBA;EACA,qBAAA;ADpmBA;;AAEA,mCAAmC",
-      "file": "form.vue",
-      "sourcesContent": ["@charset \"UTF-8\";\n.dynamic-form-container {\n  padding: 20px;\n}\n.dynamic-form-container .el-form .el-form-item::v-deep .el-input,\n.dynamic-form-container .el-form .el-form-item::v-deep .el-select {\n  width: 100%;\n}\n.dynamic-form-container .el-form .el-form-item::v-deep .el-input__inner {\n  width: 100%;\n}\n\n.el-form-group {\n  margin-bottom: 20px;\n  /* padding: 15px; */\n  border-bottom: 1px solid #ebeef5;\n}\n\n.el-form-group__title {\n  font-weight: bold;\n  margin-bottom: 15px;\n  font-size: 14px;\n  color: #606266;\n}\n\n.form-button-area {\n  padding-top: 10px;\n  border-top: 1px solid #ebeef5;\n}\n\n.form-button-area .el-button + .el-button {\n  margin-left: 10px;\n}\n\n/* 只读模式样式 */\n.dynamic-form-container.readonly .el-descriptions__body {\n  background-color: #fafafa;\n}\n.dynamic-form-container.readonly .el-descriptions-item__label {\n  font-weight: bold;\n}\n.dynamic-form-container.readonly .el-descriptions-item__content {\n  word-break: break-all;\n}\n\n/*# sourceMappingURL=form.vue.map */", "<script lang=\"jsx\">\nimport { renderNode } from \"./utils/vnode\"\nimport { isObject, isString ,isFunction} from \"./utils/index\"\nimport valueHook from \"./utils/value-hook\"\n\n// type FormItems = { // 表单项配置\n//     label: string; // 标签\n//     prop: string; // 字段名\n\n//     options?: { value: string; label: string; disabled?: boolean }[] || ()=>[]; // 字典数据\n//     rules?: any[]; // 验证规则\n\n//     children?: FormItems[];\n//     hidden?: boolean; // 是否隐藏\n//     help?: string; // 帮助信息\n\n//     span?: number; // 栅格占据的列数\n//     labelWidth?: string; // formitem 标签宽度 \n\n//     component?: VNode;\n// };\n// type VNodeFunction = ({ scope,h }) => VNode | ({ scope,h }) =><div>{ scope }</div> | <div />;\n\n// type VNodeObject = { \n//     name?: string | Component; // 组件名 | 组件引用\n//     options?: any[]; // 选项\n//     attrs?: any; // 属性\n//     on?: any; // 事件\n//     props?: any; // 属性\n//     [key: string]: any;\n// };\n// type VNode = string | VNodeFunction | VNodeObject;\n\n\nexport default {\n    props: {\n        // 表单配置项，可以从外部传入\n        formItems: {\n            type: Array,\n            default: () => []\n        },\n        // 初始表单数据\n        initialFormData: {\n            type: Object,\n            default: () => ({})\n        },\n        // 按钮配置\n        buttons: {\n            type: Object,\n            default: () => ({\n                submit: {\n                    show: true,\n                    text: '提交',\n                    type: 'primary',\n                    loading: false\n                },\n                cancel: {\n                    show: true,\n                    text: '取消',\n                    type: 'default'\n                }\n            })\n        },\n        // 按钮位置\n        buttonPosition: {\n            type: String,\n            default: 'right', // center, left, right\n            validator: value => ['center', 'left', 'right'].includes(value)\n        },\n        // 是否显示按钮区域\n        showButtons: {\n            type: Boolean,\n            default: true\n        },\n        readonly: {\n            type: Boolean\n        },\n        labelWidth: {\n            type: String,\n            default: '80px'\n        },\n        column: {\n            type: Number,\n            default: 2\n        },\n        gutter: {\n            type: Number,\n            default: 10\n        },\n        size: {\n            type: String,\n            default: 'small'\n        },\n        // value: {\n        //     type: Object,\n        //     default: () => ({})\n        // },\n\n\n    },\n\n    data() {\n        return {\n            form: {},\n            // 如果没有传入formItems，则使用默认配置\n            items: [],\n            activeName: 'first',\n            submitLoading: false\n\n        }\n    },\n\n    computed: {\n        // 从items中提取所有字段的规则\n        formRules() {\n            const rules = {};\n\n            // 递归提取规则函数\n            const extractRules = (nodes) => {\n                if (!nodes || !nodes.length) return;\n\n                nodes.forEach(node => {\n                    // 如果节点有children，递归处理\n                    if (node.children && node.children.length) {\n                        extractRules(node.children);\n                    }\n\n                    // 如果是表单字段且有规则，添加到规则对象\n                    if (node.prop && node.rules) {\n                        rules[node.prop] = node.rules;\n                    }\n                });\n            };\n\n            // 对所有配置项提取规则\n            extractRules(this.items);\n\n            return rules;\n        },\n        // 按钮区域样式\n        buttonAreaStyle() {\n            return {\n                textAlign: this.buttonPosition,\n                marginTop: '20px'\n            };\n        },\n        // label宽度\n        labelStyle() {\n            return {\n                width: this.labelWidth,\n                textAlign: 'center'\n            };\n        },\n\n\n    },\n\n    watch: {\n        // 监听外部传入的表单数据变化\n        initialFormData: {\n            handler(val) {\n                this.form = JSON.parse(JSON.stringify(val));\n            },\n            immediate: true,\n            deep: true\n        },\n        // 监听外部传入的表单配置变化\n        formItems: {\n            handler(val) {\n                if (val && val.length) {\n                    this.items = val;\n                }\n            },\n            immediate: true,\n            deep: true\n        },\n        // 监听外部传入的value变化\n        // value: {\n        //     handler(val) {\n        //         this.form = JSON.parse(JSON.stringify(val)) || {};\n        //     },\n        //     immediate: true,\n        //     deep: true\n        // },\n        // v-model绑定的值变化时，更新表单数据\n        form: {\n            handler(val) {\n                this.$emit('input', val);\n            },\n            deep: true\n        }\n    },\n\n    methods: {\n        // 处理表单输入事件\n        handleInput(prop, value) {\n            this.$set(this.form, prop, value);\n            // 触发change事件，将变更通知给父组件\n            this.$emit('field-change', { prop, value, form: this.form });\n        },\n\n        // 递归渲染函数 - 根据节点类型渲染不同内容\n        renderNode(node, index) {\n            // 如果是只读模式，使用只读渲染函数\n            if (this.readonly) {\n                return this.renderReadOnlyNode(node, index);\n            }\n\n            // 如果是输入字段（没有type或没有children，则视为字段）\n            if (!node.type || (!node.children && node.prop)) {\n                return this.renderField(node, index);\n            }\n\n            // 根据节点类型渲染\n            switch (node.type) {\n                case 'tab':\n                    return this.renderTab(node, index);\n                case 'group':\n                    return this.renderGroup(node, index);\n                default:\n                    // 默认当作字段渲染\n                    return this.renderField(node, index);\n            }\n        },\n\n        // 只读模式 - 递归渲染函数\n        renderReadOnlyNode(node, index) {\n            if (!node.type || (!node.children && node.prop)) {\n                return this.renderReadOnlyField(node, index);\n            }\n            switch (node.type) {\n                case 'tab':\n                    return this.renderReadOnlyTab(node, index);\n                case 'group':\n                    return this.renderReadOnlyGroup(node, index);\n                default:\n                    return this.renderReadOnlyField(node, index);\n            }\n        },\n\n        // 只读模式 - 渲染标签页\n        renderReadOnlyTab(tab, index) {\n            return (\n                <el-tab-pane\n                    key={tab.name || index}\n                    label={tab.label}\n                    name={tab.name || index}\n                    {...tab.props}\n                >\n                    {this.renderReadOnlyChildren(tab.children)}\n                </el-tab-pane>\n            );\n        },\n\n        // 只读模式 - 渲染分组\n        renderReadOnlyGroup(group, index) {\n            return (\n                <div class={['el-form-group', group.className]} key={index} {...group.props}>\n                    <el-descriptions\n                        title={group.title}\n                        border\n                        column={this.column}\n                        size={this.size}\n                        labelStyle={this.labelStyle}\n                    >\n                        {this.renderReadOnlyDescriptionItems(group.children)}\n                    </el-descriptions>\n                </div>\n            );\n        },\n\n        // 只读模式 - 渲染字段\n        renderReadOnlyField(field, index) {\n            // 如果字段被配置为隐藏，则不渲染\n            if (field.hidden) {\n                return null;\n            }\n\n            // 获取字段值\n            const value = this.form[field.prop];\n\n            // 处理显示值\n            let displayValue = value;\n\n            // 处理不同类型的字段显示值\n            if (field.options && Array.isArray(field.options)) {\n                const option = field.options.find(opt => opt.value === value);\n                if (option) {\n                    displayValue = option.label;\n                }\n            }\n\n            // 如果处于顶层（不在group内），则需要包装在el-descriptions中\n            if (!field._inGroup) {\n                return (\n                    <el-col span={24 / this.column || field.span || 12} key={field.prop || index}>\n                        <el-descriptions labelStyle={this.labelStyle} border column={this.column} size={this.size}>\n                            <el-descriptions-item label={field.label || ''}>\n                                {displayValue || '-'}\n                            </el-descriptions-item>\n                        </el-descriptions>\n                    </el-col>\n                );\n            }\n            // 在group内部的字段直接返回\n            return (\n                <el-descriptions-item label={field.label || ''}>\n                    {displayValue || '-'}\n                </el-descriptions-item>\n            );\n        },\n\n        // 只读模式 - 渲染描述项\n        renderReadOnlyDescriptionItems(children) {\n            if (!children || !children.length) {\n                return null;\n            }\n\n            return children.map(child => {\n                // 标记字段在group内部\n                child._inGroup = true;\n                return this.renderReadOnlyField(child);\n            });\n        },\n\n        // 只读模式 - 渲染子节点\n        renderReadOnlyChildren(children) {\n            // 如果没有子节点，返回空\n            if (!children || !children.length) {\n                return null;\n            }\n\n            // 检查第一个子节点类型，判断是否需要包装\n            const firstChild = children[0];\n\n            // 如果第一个子节点是group，不需要额外包装\n            if (firstChild.type === 'group') {\n                return children.map((child, index) => this.renderReadOnlyNode(child, index));\n            }\n\n            // 如果子节点不是输入字段，也不是分组，则直接渲染\n            if (firstChild.type && firstChild.type !== 'group' && !firstChild.prop) {\n                return children.map((child, index) => this.renderReadOnlyNode(child, index));\n            }\n\n            // 如果是普通字段（非group），则包装在el-descriptions中\n            return (\n                <el-descriptions border column={this.column} size={this.size} labelStyle={this.labelStyle}>\n                    {children.map((child, index) => {\n                        child._inGroup = true;\n                        return this.renderReadOnlyNode(child, index);\n                    })}\n                </el-descriptions>\n            );\n        },\n\n        // 渲染标签页\n        renderTab(tab, index) {\n            return (\n                <el-tab-pane\n                    key={tab.name || index}\n                    label={tab.label}\n                    name={tab.name || index}\n                    {...tab.props}\n                >\n                    {this.renderChildren(tab.children)}\n                </el-tab-pane>\n            );\n        },\n\n        // 渲染分组\n        renderGroup(group, index) {\n            return (\n                <div class={['el-form-group', group.className]} key={index} {...group.props}>\n                    {group.title && <div class=\"el-form-group__title\">{group.title}</div>}\n                    <div>\n                        {this.renderChildren(group.children)}\n                    </div>\n                </div>\n            );\n        },\n\n        // 渲染各种表单控件\n        renderFormControl(field) {\n            let component = field.component;\n            if (isString(field.component)) {\n                component = {\n                    name: field.component,\n                    attrs: {\n                        placeholder: field.placeholder || `请输入${field.label}`,\n                        clearable: typeof field.clearable !== 'undefined' ? field.clearable : true,\n                    }\n                }\n            }\n            if ( !isFunction(field.component)) {\n                if (field.component === 'el-select') {\n                    component.attrs = {\n                        ...component.attrs,\n                        placeholder: field.placeholder || `请选择${field.label}`,\n                        filterable: true,\n\n                    }\n                } \n            }\n\n            if( field.hook?.bind?.length ){\n                let value = valueHook.bind(this.form[ field.prop ], field.hook?.bind , this.form)\n                this.$set(this.form, field.prop, value)\n            }\n            // component 渲染 { prop: this.column.prop, scope: scope }\n            return renderNode.call(this, component, {\n                prop: field.prop,\n                scope: this.form\n            });\n\n        },\n\n        // 渲染字段\n        renderField(field, index) {\n            // 如果字段被配置为隐藏，则不渲染\n            if (field.hidden) {\n                return null;\n            }\n            return (\n                <el-col span={24 / this.column || field.span || 12} key={field.prop || index}>\n                    <el-form-item\n                        label={field.label}\n                        prop={field.prop}\n                        rules={field.rules} // 直接使用字段自身的规则\n                        labelWidth={field.labelWidth || this.labelWidth}\n                        {...field.formItemProps}\n                    >\n                        {this.renderFormControl(field)}\n                        {field.help && <div class=\"form-item-help\">{field.help}</div>}\n                    </el-form-item>\n                </el-col>\n            );\n        },\n\n        // 渲染子节点\n        renderChildren(children) {\n            // 如果没有子节点，返回空\n            if (!children || !children.length) {\n                return null;\n            }\n\n            // 检查第一个子节点类型，判断是否需要包装\n            const firstChild = children[0];\n\n            // 如果第一个子节点是group，不需要额外包装\n            if (firstChild.type === 'group') {\n                return children.map(this.renderNode);\n            }\n\n            // 如果子节点不是输入字段，也不是分组，则直接渲染\n            if (firstChild.type && firstChild.type !== 'group' && !firstChild.prop) {\n                return children.map(this.renderNode);\n            }\n\n            // 其他情况（子节点是输入字段）包装在row中\n            return <el-row gutter={this.gutter}>{children.map(this.renderNode)}</el-row>;\n        },\n\n        // 判断是否有标签页\n        hasTabs() {\n            return this.items && this.items.some(item => item.type === 'tab');\n        },\n\n        // 渲染按钮区域\n        renderButtons() {\n            if (!this.showButtons || this.readonly) return null;\n\n            return (\n                <div class=\"form-button-area\" style={this.buttonAreaStyle}>\n                    {this.buttons.cancel && this.buttons.cancel.show && (\n                        <el-button\n                            onClick={this.handleCancel}\n                            type={this.buttons.cancel.type}\n                            {...this.buttons.cancel.props}\n                        >\n                            {this.buttons.cancel.text}\n                        </el-button>\n                    )}\n                    {this.buttons.submit && this.buttons.submit.show && (\n                        <el-button\n                            onClick={this.handleSubmit}\n                            type={this.buttons.submit.type}\n                            loading={this.submitLoading || (this.buttons.submit.loading)}\n                            {...this.buttons.submit.props}\n                        >\n                            {this.buttons.submit.text}\n                        </el-button>\n                    )}\n                </div>\n            );\n        },\n\n        // 处理提交\n        async handleSubmit() {\n            try {\n                this.submitLoading = true;\n                // 表单验证\n                const formData = await this.validate();\n                // 发出提交事件\n                this.$emit('submit', formData);\n\n                // return formData;\n            } catch (error) {\n                this.$emit('submit-error', error);\n                return Promise.reject(error);\n            }\n            this.submitLoading = false;\n        },\n\n        // 处理取消\n        handleCancel() {\n            this.$emit('cancel');\n        },\n\n        // 表单验证方法\n        validate() {\n            return new Promise((resolve, reject) => {\n                this.$refs.form.validate(valid => {\n                    if (valid) {\n                        resolve(this.form);\n                    } else {\n                        reject(new Error('表单验证失败'));\n                    }\n                });\n            });\n        },\n\n        // 重置表单\n        resetForm() {\n            this.form = JSON.parse(JSON.stringify(this.initialFormData)) || {};\n            this.$refs.form.resetFields();\n            this.$emit('form-reset', this.form);\n        },\n\n        // 获取表单数据\n        getFormData() {\n            return this.form;\n        }\n    },\n\n    render() {\n\n        if (this.readonly) {\n            // 只读模式渲染\n            return (\n                <div class=\"dynamic-form-container readonly\">\n                    {this.hasTabs() ? (\n                        // 渲染标签页结构\n                        <el-tabs v-on={this.$listeners} v-model={this.activeName}>\n                            {this.items.map((item, index) => this.renderReadOnlyNode(item, index))}\n                        </el-tabs>\n                    ) : (\n                        // 非标签页结构，直接渲染\n                        this.renderReadOnlyChildren(this.items)\n                    )}\n                </div>\n            );\n        }\n\n        const formProps = {\n            model: this.form,\n            rules: this.formRules,\n            ...this.$attrs\n        };\n        // 如果没有配置项，渲染空表单\n        if (!this.items || !this.items.length) {\n            return <div class=\"dynamic-form-container\"><el-form ref=\"form\" {...{ props: formProps }}></el-form></div>;\n        }\n\n        return (\n            <div class=\"dynamic-form-container\">\n                <el-form ref=\"form\" {...{ props: formProps }}>\n                    {this.hasTabs() ? (\n                        // 渲染标签页结构\n                        <el-tabs v-on={this.$listeners} v-model={this.activeName}>\n                            {this.items.map(this.renderNode)}\n                        </el-tabs>\n                    ) : (\n                        // 非标签页结构，直接渲染\n                        this.renderChildren(this.items)\n                    )}\n\n                    {/* 渲染按钮区域 */}\n                    {this.renderButtons()}\n                </el-form>\n            </div>\n        );\n    }\n}\n</script>\n\n<style scoped lang=\"scss\">\n.dynamic-form-container {\n    padding: 20px;\n\n    .el-form{\n        \n\n        .el-form-item {\n            \n            &::v-deep{\n                .el-input,\n                .el-select{\n                    width: 100%;\n                }\n                .el-input__inner {\n                    width: 100%;\n                }\n            }\n\n        }\n\n         \n\n    }\n}\n\n.el-form-group {\n    margin-bottom: 20px;\n    /* padding: 15px; */\n    border-bottom: 1px solid #ebeef5;\n}\n\n.el-form-group__title {\n    font-weight: bold;\n    margin-bottom: 15px;\n    font-size: 14px;\n    color: #606266;\n}\n\n.form-button-area {\n    padding-top: 10px;\n    border-top: 1px solid #ebeef5;\n}\n\n.form-button-area .el-button+.el-button {\n    margin-left: 10px;\n}\n\n/* 只读模式样式 */\n.dynamic-form-container.readonly {\n    .el-descriptions__body {\n        background-color: #fafafa;\n    }\n\n    .el-descriptions-item__label {\n        font-weight: bold;\n    }\n\n    .el-descriptions-item__content {\n        word-break: break-all;\n    }\n}\n</style>\n"]
-    },
-    media: undefined
-  });
-};
-/* scoped */
-var __vue_scope_id__ = "data-v-ef86d32c";
+var __vue_scope_id__ = "data-v-35906918";
 /* module identifier */
 var __vue_module_identifier__ = undefined;
 /* functional template */
-var __vue_is_functional_template__ = undefined;
+var __vue_is_functional_template__ = false;
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-var __vue_component__ = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, false, createInjector, undefined, undefined);
+var __vue_component__ = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__,
+  staticRenderFns: __vue_staticRenderFns__
+}, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, false, createInjector, undefined, undefined);
 
-___$insertStylesToHeader(".el-crud .flex {\n  display: flex;\n}\n.el-crud .inline-flex {\n  display: inline-flex;\n}\n.el-crud .hidden {\n  display: none;\n}\n.el-crud .block {\n  display: block;\n}\n.el-crud .inline-block {\n  display: inline-block;\n}\n.el-crud .flex-row {\n  flex-direction: row;\n}\n.el-crud .flex-row-reverse {\n  flex-direction: row-reverse;\n}\n.el-crud .flex-col {\n  flex-direction: column;\n}\n.el-crud .flex-col-reverse {\n  flex-direction: column-reverse;\n}\n.el-crud .flex-wrap {\n  flex-wrap: wrap;\n}\n.el-crud .flex-nowrap {\n  flex-wrap: nowrap;\n}\n.el-crud .flex-wrap-reverse {\n  flex-wrap: wrap-reverse;\n}\n.el-crud .justify-start {\n  justify-content: flex-start;\n}\n.el-crud .justify-end {\n  justify-content: flex-end;\n}\n.el-crud .justify-center {\n  justify-content: center;\n}\n.el-crud .justify-between {\n  justify-content: space-between;\n}\n.el-crud .justify-around {\n  justify-content: space-around;\n}\n.el-crud .justify-evenly {\n  justify-content: space-evenly;\n}\n.el-crud .items-start {\n  align-items: flex-start;\n}\n.el-crud .items-end {\n  align-items: flex-end;\n}\n.el-crud .items-center {\n  align-items: center;\n}\n.el-crud .items-baseline {\n  align-items: baseline;\n}\n.el-crud .items-stretch {\n  align-items: stretch;\n}\n.el-crud .content-start {\n  align-content: flex-start;\n}\n.el-crud .content-end {\n  align-content: flex-end;\n}\n.el-crud .content-center {\n  align-content: center;\n}\n.el-crud .content-between {\n  align-content: space-between;\n}\n.el-crud .content-around {\n  align-content: space-around;\n}\n.el-crud .content-evenly {\n  align-content: space-evenly;\n}\n.el-crud .self-auto {\n  align-self: auto;\n}\n.el-crud .self-start {\n  align-self: flex-start;\n}\n.el-crud .self-end {\n  align-self: flex-end;\n}\n.el-crud .self-center {\n  align-self: center;\n}\n.el-crud .self-stretch {\n  align-self: stretch;\n}\n.el-crud .flex-1 {\n  flex: 1 1 0%;\n}\n.el-crud .flex-auto {\n  flex: 1 1 auto;\n}\n.el-crud .flex-initial {\n  flex: 0 1 auto;\n}\n.el-crud .flex-none {\n  flex: none;\n}\n.el-crud .grow {\n  flex-grow: 1;\n}\n.el-crud .grow-0 {\n  flex-grow: 0;\n}\n.el-crud .shrink {\n  flex-shrink: 1;\n}\n.el-crud .shrink-0 {\n  flex-shrink: 0;\n}\n.el-crud .w-full {\n  width: 100%;\n}\n.el-crud .w-auto {\n  width: auto;\n}\n.el-crud .h-full {\n  height: 100%;\n}\n.el-crud .h-auto {\n  height: auto;\n}\n.el-crud .h-screen {\n  height: 100vh;\n}\n.el-crud .m-0 {\n  margin: 0;\n}\n.el-crud .m-auto {\n  margin: auto;\n}\n.el-crud .mx-auto {\n  margin-left: auto;\n  margin-right: auto;\n}\n.el-crud .my-auto {\n  margin-top: auto;\n  margin-bottom: auto;\n}\n.el-crud .text-left {\n  text-align: left;\n}\n.el-crud .text-center {\n  text-align: center;\n}\n.el-crud .text-right {\n  text-align: right;\n}\n.el-crud .text-justify {\n  text-align: justify;\n}\n.el-crud .font-normal {\n  font-weight: 400;\n}\n.el-crud .font-medium {\n  font-weight: 500;\n}\n.el-crud .font-semibold {\n  font-weight: 600;\n}\n.el-crud .font-bold {\n  font-weight: 700;\n}\n.el-crud .overflow-hidden {\n  overflow: hidden;\n}\n.el-crud .overflow-auto {\n  overflow: auto;\n}\n.el-crud .overflow-scroll {\n  overflow: scroll;\n}\n.el-crud .overflow-x-auto {\n  overflow-x: auto;\n}\n.el-crud .overflow-y-auto {\n  overflow-y: auto;\n}\n.el-crud .relative {\n  position: relative;\n}\n.el-crud .absolute {\n  position: absolute;\n}\n.el-crud .fixed {\n  position: fixed;\n}\n.el-crud .sticky {\n  position: sticky;\n}\n.el-crud .cursor-pointer {\n  cursor: pointer;\n}\n.el-crud .cursor-not-allowed {\n  cursor: not-allowed;\n}\n.el-crud-toolbar {\n  margin-top: 10px;\n}\n.el-crud .crud-table {\n  margin-top: 10px;\n}\n\n/*# sourceMappingURL=output.css.map */");
+___$insertStylesToHeader(".el-crud .flex {\n  display: flex;\n}\n.el-crud .inline-flex {\n  display: inline-flex;\n}\n.el-crud .hidden {\n  display: none;\n}\n.el-crud .block {\n  display: block;\n}\n.el-crud .inline-block {\n  display: inline-block;\n}\n.el-crud .flex-row {\n  flex-direction: row;\n}\n.el-crud .flex-row-reverse {\n  flex-direction: row-reverse;\n}\n.el-crud .flex-col {\n  flex-direction: column;\n}\n.el-crud .flex-col-reverse {\n  flex-direction: column-reverse;\n}\n.el-crud .flex-wrap {\n  flex-wrap: wrap;\n}\n.el-crud .flex-nowrap {\n  flex-wrap: nowrap;\n}\n.el-crud .flex-wrap-reverse {\n  flex-wrap: wrap-reverse;\n}\n.el-crud .justify-start {\n  justify-content: flex-start;\n}\n.el-crud .justify-end {\n  justify-content: flex-end;\n}\n.el-crud .justify-center {\n  justify-content: center;\n}\n.el-crud .justify-between {\n  justify-content: space-between;\n}\n.el-crud .justify-around {\n  justify-content: space-around;\n}\n.el-crud .justify-evenly {\n  justify-content: space-evenly;\n}\n.el-crud .items-start {\n  align-items: flex-start;\n}\n.el-crud .items-end {\n  align-items: flex-end;\n}\n.el-crud .items-center {\n  align-items: center;\n}\n.el-crud .items-baseline {\n  align-items: baseline;\n}\n.el-crud .items-stretch {\n  align-items: stretch;\n}\n.el-crud .content-start {\n  align-content: flex-start;\n}\n.el-crud .content-end {\n  align-content: flex-end;\n}\n.el-crud .content-center {\n  align-content: center;\n}\n.el-crud .content-between {\n  align-content: space-between;\n}\n.el-crud .content-around {\n  align-content: space-around;\n}\n.el-crud .content-evenly {\n  align-content: space-evenly;\n}\n.el-crud .self-auto {\n  align-self: auto;\n}\n.el-crud .self-start {\n  align-self: flex-start;\n}\n.el-crud .self-end {\n  align-self: flex-end;\n}\n.el-crud .self-center {\n  align-self: center;\n}\n.el-crud .self-stretch {\n  align-self: stretch;\n}\n.el-crud .flex-1 {\n  flex: 1 1 0%;\n}\n.el-crud .flex-auto {\n  flex: 1 1 auto;\n}\n.el-crud .flex-initial {\n  flex: 0 1 auto;\n}\n.el-crud .flex-none {\n  flex: none;\n}\n.el-crud .grow {\n  flex-grow: 1;\n}\n.el-crud .grow-0 {\n  flex-grow: 0;\n}\n.el-crud .shrink {\n  flex-shrink: 1;\n}\n.el-crud .shrink-0 {\n  flex-shrink: 0;\n}\n.el-crud .w-full {\n  width: 100%;\n}\n.el-crud .w-auto {\n  width: auto;\n}\n.el-crud .h-full {\n  height: 100%;\n}\n.el-crud .h-auto {\n  height: auto;\n}\n.el-crud .h-screen {\n  height: 100vh;\n}\n.el-crud .m-0 {\n  margin: 0;\n}\n.el-crud .m-auto {\n  margin: auto;\n}\n.el-crud .mx-auto {\n  margin-left: auto;\n  margin-right: auto;\n}\n.el-crud .my-auto {\n  margin-top: auto;\n  margin-bottom: auto;\n}\n.el-crud .text-left {\n  text-align: left;\n}\n.el-crud .text-center {\n  text-align: center;\n}\n.el-crud .text-right {\n  text-align: right;\n}\n.el-crud .text-justify {\n  text-align: justify;\n}\n.el-crud .font-normal {\n  font-weight: 400;\n}\n.el-crud .font-medium {\n  font-weight: 500;\n}\n.el-crud .font-semibold {\n  font-weight: 600;\n}\n.el-crud .font-bold {\n  font-weight: 700;\n}\n.el-crud .overflow-hidden {\n  overflow: hidden;\n}\n.el-crud .overflow-auto {\n  overflow: auto;\n}\n.el-crud .overflow-scroll {\n  overflow: scroll;\n}\n.el-crud .overflow-x-auto {\n  overflow-x: auto;\n}\n.el-crud .overflow-y-auto {\n  overflow-y: auto;\n}\n.el-crud .relative {\n  position: relative;\n}\n.el-crud .absolute {\n  position: absolute;\n}\n.el-crud .fixed {\n  position: fixed;\n}\n.el-crud .sticky {\n  position: sticky;\n}\n.el-crud .cursor-pointer {\n  cursor: pointer;\n}\n.el-crud .cursor-not-allowed {\n  cursor: not-allowed;\n}\n.el-crud .crud-table {\n  margin-top: 10px;\n}\n\n/*# sourceMappingURL=output.css.map */");
 
-exports.Crud = __vue_component__$1;
-exports.CrudForm = __vue_component__;
-exports.CrudTable = __vue_component__$5;
-exports.QueryForm = __vue_component__$3;
+exports.Crud = __vue_component__;
+exports.CrudTable = __vue_component__$4;
+exports.QueryForm = __vue_component__$2;
 //# sourceMappingURL=index.js.map

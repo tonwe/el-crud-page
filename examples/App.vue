@@ -1,29 +1,22 @@
 <template>
   <div id="app">
-    <el-container>
-      <el-header>
-        <h1>el-crud-page 完整示例</h1>
-      </el-header>
-      <el-main>
-        <!-- CRUD 组件 -->
-        <crud
-          ref="crud"
-          :columns="columns"
-          :queryInputWidth="140"
-          :queryLabelWidth="80"
-          :query-items="queryItems"
-          :buttons="buttons"
-          @action="handleAction"
-          @row-action="handleRowAction">
-        </crud>
-      </el-main>
-    </el-container>
+    <!-- CRUD 组件 -->
+    <crud
+      ref="crud"
+      :columns="columns"
+      :queryInputWidth="140"
+      :queryLabelWidth="80"
+      :query-items="queryItems"
+      :buttons="buttons"
+      @action="handleAction"
+      @row-action="handleRowAction">
+    </crud>
   </div>
 </template>
 
 <script>
-import { Crud } from '../src/index.js';
-
+import { Crud } from '/Users/tonwe/git/el-crud-page/dist/index.esm.js';
+console.log('Crud:', Crud);
 export default {
   name: 'App',
   components: {

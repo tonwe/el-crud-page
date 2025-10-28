@@ -34,7 +34,7 @@
             <div class="flex justify-between el-crud-toolbar">
                 <slot name="buttons" :selections="selections">
                     <div>
-                        <el-button :size="item.size" @click="handleButtonClick(item)" v-for="item in actionButtons"
+                        <el-button :size="item.size" @click="handleButtonClick(item)" v-for="(item,index) in actionButtons" :key="`${item.key || ('action-btn-'+index)}`"
                             :plain="item.plain" :disabled="item.disabled" :type="item.type" :icon="item.icon">{{
                                 item.text
                             }}</el-button>

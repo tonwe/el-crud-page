@@ -1,7 +1,6 @@
 {
   "name": "el-crud-page",
-  "version": "1.0.1",
-  "type": "module",
+  "version": "1.0.3",
   "description": "A powerful CRUD page component library for Element UI v2",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -14,8 +13,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "demo": "vite",
-    "demo:build": "vite build",
+    "demo": "vue-cli-service serve",
+    "demo:build": "vue-cli-service build",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -46,15 +45,14 @@
     "@rollup/plugin-babel": "^6.0.0",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-node-resolve": "^15.0.0",
-    "@vitejs/plugin-vue2": "^2.3.1",
     "@vue/babel-preset-jsx": "^1.4.0",
+    "@vue/cli-service": "4.4.6",
     "element-ui": "^2.15.0",
     "rollup": "^3.0.0",
     "rollup-plugin-scss": "^4.0.0",
     "rollup-plugin-vue": "^5.1.9",
-    "vite": "^5.0.0",
-    "vue": "^2.7.0",
-    "vue-template-compiler": "^2.7.0",
-    "sass": "^1.93.2"
+    "sass": "^1.93.2",
+    "vue": "^2.6.12",
+    "vue-template-compiler": "^2.6.12"
   }
 }

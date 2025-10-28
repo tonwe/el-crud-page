@@ -1,7 +1,7 @@
 <!-- crud table 组件 -->
 <template>
     <el-table :data="data" class="crud-table" ref="table" v-bind="combinedProps" v-on="combinedEvents">
-        <crud-table-column v-for="column in columns" :indexMethod="(index)=>( baseIndex + 1 + index )"
+        <crud-table-column v-for="(column,index) in columns" :key="`${ column.key || ('column_'+index) }`" :indexMethod="(index)=>( baseIndex + 1 + index )"
             v-if="!column[`v-hasPermi`] || !column[`v-hasPermi`].length || $auth.hasPermiOr(column[`v-hasPermi`] || [])"
             :column="column" @action="onRowAction">
         </crud-table-column>
