@@ -61,7 +61,7 @@
                     :start-placeholder="item['startPlaceholder'] || '开始日期'"
                     :end-placeholder="item['endPlaceholder'] || '结束日期'" :range-separator="item['rangeSeparator']"
                     :value-format="item['valueFormat'] || 'yyyy-MM-dd'"
-                    :style="item.range ? dateRangeStyle : inputStyle"></el-date-picker>
+                    :style="inputStyle"></el-date-picker>
                 <el-date-picker v-else-if="item.type === 'datetime'" :type="item.range ? 'datetimerange' : 'datetime'"
                     v-model="queryParams[item.prop]" :placeholder="item.placeholder" clearable
                     :start-placeholder="item['startPlaceholder'] || '开始时间'"

@@ -146,6 +146,7 @@ export default {
 <style scoped lang="scss">
 .crud-table {
     &::v-deep {
+        .el-table__fixed,
         .el-table__body-wrapper {
             .el-table__cell {
                 .cell:empty::after {
