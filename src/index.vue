@@ -41,7 +41,7 @@
                     </div>
                 </slot>
                 <slot name="toolbar" :columns="columns" :showSearch="showSearch">
-                    <right-toolbar :showSearch.sync="showSearch" @queryTable="refresh" :columns="columns"
+                    <right-toolbar :showSearch.sync="showSearch" @queryTable="refresh" :columns.sync="columns"
                         :search="!!(queryItems && queryItems.length)"></right-toolbar>
                 </slot>
             </div>

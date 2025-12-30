@@ -1,6 +1,6 @@
 {
   "name": "el-crud-page",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A powerful CRUD page component library for Element UI v2",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -37,7 +37,8 @@
   "homepage": "https://github.com/tonwe/el-crud-page#readme",
   "peerDependencies": {
     "element-ui": "^2.x",
-    "vue": "^2.6.0"
+    "vue": "^2.6.0",
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",
@@ -54,5 +55,8 @@
     "sass": "^1.93.2",
     "vue": "^2.6.12",
     "vue-template-compiler": "^2.6.12"
+  },
+  "dependencies": {
+    "vuedraggable": "^2.24.3"
   }
 }
