@@ -16,20 +16,22 @@
 
     <div class="el-crud">
         <slot name="tabQuery">
-            <el-tabs class="top-tab-query" v-if="tabPanes.length > 0" :value="tabQuery.tabKey"
+            <div class="top-tab-query">
+            <el-tabs v-if="tabPanes.length > 0" :value="tabQuery.tabKey"
                 @tab-click="handleTabClick">
                 <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabPanes"
                     :key="item.name"></el-tab-pane>
             </el-tabs>
+            </div>
         </slot>
         <!-- 搜索过滤插槽 -->
         <slot name="query" :queryItems="queryItems" :lineClamp="queryLineClamp" :labelWidth="queryLabelWidth"
             :inputWidth="queryInputWidth" :inline="queryInline">
-            <query-form v-show="showSearch" v-if="queryItems && queryItems.length" :queryItems="queryItems"
+            <query-form ref="queryForm" v-show="showSearch" v-if="queryItems && queryItems.length" :queryItems="queryItems"
                 :lineClamp="queryLineClamp" :label-width="queryLabelWidth" :input-width="queryInputWidth" :inline="queryInline"
                 @queryTable="handleQuery" />
         </slot>
-        <div class="container-main" :class="{ pt5: tabPanes.length > 0 }">
+        <div class="container-main">
             
             <!-- 工具条插槽 -->
             <div class="flex justify-between el-crud-toolbar">
@@ -210,7 +212,8 @@ export default {
     methods: {
         handleTabClick(tab) {
             this.tabQuery.tabKey = tab.name
-            this.refresh()
+            // this.refresh()
+            this.$refs.queryForm?.resetQuery();
         },
         handleSelectionChange(e) {
             this.selections = e
@@ -332,6 +335,8 @@ export default {
 <style scoped lang="scss">
 .top-tab-query {
     margin-bottom: 0px;
+    background-color: #fff;
+    padding: 0 10px;
 
     &::v-deep {
         .el-tabs__header {
