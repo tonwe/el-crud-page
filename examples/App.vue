@@ -8,6 +8,7 @@
       :queryLabelWidth="80"
       :query-items="queryItems"
       :buttons="buttons"
+      :tab-panes="tabPanes"
       @action="handleAction"
       @row-action="handleRowAction">
     </crud>
@@ -24,6 +25,10 @@ export default {
   },
   data() {
     return {
+      tabPanes:[
+        { label: '管理员', name: 'admin', tabKey: 'admin' },
+        { label: '普通用户', name: 'user', tabKey: 'admin' },
+      ],
       // 表格列配置
       columns: [
         { type: 'selection', width: 55 },

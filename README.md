@@ -1,6 +1,6 @@
 # el-crud-page
 
-一个基于 Element UI v2 的强大 CRUD 页面组件库，简化表格、表单和查询的开发。
+一个基于 Element UI v2 的 CRUD 页面组件库。
 
 ## 特性
 

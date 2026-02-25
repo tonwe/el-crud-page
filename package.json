@@ -1,6 +1,6 @@
 {
   "name": "el-crud-page",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A powerful CRUD page component library for Element UI v2",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

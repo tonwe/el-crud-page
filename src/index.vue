@@ -15,6 +15,13 @@
 <template>
 
     <div class="el-crud">
+        <slot name="tabQuery">
+            <el-tabs class="top-tab-query" v-if="tabPanes.length > 0" :value="tabQuery.tabKey"
+                @tab-click="handleTabClick">
+                <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabPanes"
+                    :key="item.name"></el-tab-pane>
+            </el-tabs>
+        </slot>
         <!-- 搜索过滤插槽 -->
         <slot name="query" :queryItems="queryItems" :lineClamp="queryLineClamp" :labelWidth="queryLabelWidth"
             :inputWidth="queryInputWidth" :inline="queryInline">
@@ -23,13 +30,7 @@
                 @queryTable="handleQuery" />
         </slot>
         <div class="container-main" :class="{ pt5: tabPanes.length > 0 }">
-            <slot name="tabQuery">
-                <el-tabs class="top-tab-query" v-if="tabPanes.length > 0" :value="tabQuery.tabKey"
-                    @tab-click="handleTabClick">
-                    <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabPanes"
-                        :key="item.name"></el-tab-pane>
-                </el-tabs>
-            </slot>
+            
             <!-- 工具条插槽 -->
             <div class="flex justify-between el-crud-toolbar">
                 <slot name="buttons" :selections="selections">
@@ -330,7 +331,7 @@ export default {
 
 <style scoped lang="scss">
 .top-tab-query {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
 
     &::v-deep {
         .el-tabs__header {
