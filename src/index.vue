@@ -209,10 +209,17 @@ export default {
     },
     created() {
     },
+    mounted() {
+        // this.queryParams = {};
+    },
     methods: {
         handleTabClick(tab) {
             this.tabQuery.tabKey = tab.name
             // this.refresh()
+            this.orderParams = {
+                orderByRowName: undefined,
+                orderByRule: undefined
+            }
             this.$refs.queryForm?.resetQuery();
         },
         handleSelectionChange(e) {
@@ -222,8 +229,9 @@ export default {
             this.queryParams = query;
             this.refresh()
         },
-        handleButtonClick(item) {
-            this.$emit("action", item.action, this.selections);
+        async handleButtonClick(item) {
+            const queryParams = await this.getParams();
+            this.$emit("action", item.action, this.selections ,queryParams );
         },
         handleRowAction(action, scope) {
             this.$emit("row-action", action, scope);
@@ -259,15 +267,19 @@ export default {
         async getParams() {
             const defaultSort = this.defaultSort;
             let orderParams = this.orderParams;
+            const queryParams = this.$refs.queryForm?.queryParams || { }
 
             if (!orderParams?.orderByRowName && defaultSort?.prop) {
-                const orderByRowName = toLine(defaultSort.prop);
+                let orderByRowName = toLine(defaultSort.prop);
                 let orderByRule = defaultSort.order;
 
                 if (defaultSort.order == "descending") {
                     orderByRule = "desc";
                 } else if (defaultSort.order == "ascending") {
                     orderByRule = "asc";
+                } else {
+                    orderByRule = undefined;
+                    orderByRowName = undefined;
                 }
 
                 orderParams = {
@@ -276,10 +288,7 @@ export default {
                 }
             }
 
-            let params = { ...this.queryParams, ...this.pagination, ...this.tabQuery, ...orderParams }
-
-
-
+            let params = { ...queryParams, ...this.pagination, ...this.tabQuery, ...orderParams }
             if (this.queryParamsMethod) {
                 return await this.queryParamsMethod(params);
             }
