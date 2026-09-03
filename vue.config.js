@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   pages: {
     index: {
@@ -10,11 +12,12 @@ module.exports = {
   outputDir: 'demo-dist',
   publicPath: './',
   chainWebpack: config => {
-    // 排除编译 src 目录，因为它是库源码
+    // 示例直接引用库源码，examples 和 src 都需要经过 Babel。
     config.module
       .rule('js')
       .include
-      .add(/examples/)
+      .add(path.resolve(__dirname, 'examples'))
+      .add(path.resolve(__dirname, 'src'))
       .end()
       .exclude
       .add(/node_modules/)

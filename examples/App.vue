@@ -9,6 +9,7 @@
       :query-items="queryItems"
       :buttons="buttons"
       :tab-panes="tabPanes"
+      tab-panes-position="top"
       @action="handleAction"
       @row-action="handleRowAction">
     </crud>
@@ -16,8 +17,7 @@
 </template>
 
 <script>
-import { Crud } from '/Users/tonwe/git/el-crud-page/dist/index.esm.js';
-console.log('Crud:', Crud);
+import { Crud } from '@/index.js';
 export default {
   name: 'App',
   components: {
@@ -26,19 +26,20 @@ export default {
   data() {
     return {
       tabPanes:[
-        { label: '管理员', name: 'admin', tabKey: 'admin' },
-        { label: '普通用户', name: 'user', tabKey: 'admin' },
+        { label: '管理员', name: 'admin' },
+        { label: '普通用户', name: 'user' },
       ],
       // 表格列配置
       columns: [
         { type: 'selection', width: 55 },
         { type: 'index', label: '序号', width: 60 },
-        { prop: 'id', label: 'ID', width: 80, sortable: true, visible: true },
-        { prop: 'username', label: '用户名', width: 120, visible: true },
-        { prop: 'nickname', label: '昵称', width: 120, visible: true },
-        { prop: 'email', label: '邮箱', width: 200, visible: true },
-        { prop: 'phone', label: '手机号', width: 130, visible: true },
+        { key: 'id', prop: 'id', label: 'ID', width: 80, sortable: true, visible: true },
+        { key: 'username', prop: 'username', label: '用户名', width: 120, visible: true },
+        { key: 'nickname', prop: 'nickname', label: '昵称', width: 120, visible: true },
+        { key: 'email', prop: 'email', label: '邮箱', width: 200, visible: true },
+        { key: 'phone', prop: 'phone', label: '手机号', width: 130, visible: true },
         { 
+          key: 'role',
           prop: 'role', 
           label: '角色', 
           width: 100,
@@ -54,6 +55,7 @@ export default {
           }
         },
         { 
+          key: 'status',
           prop: 'status', 
           label: '状态', 
           width: 80,
@@ -61,8 +63,9 @@ export default {
             return row.status === 1 ? '启用' : '禁用';
           }
         },
-        { prop: 'createTime', label: '创建时间', width: 180 },
+        { key: 'createTime', prop: 'createTime', label: '创建时间', width: 180 },
         {
+          key: 'actions',
           label: '操作',
           width: 200,
           type: 'action',
@@ -123,7 +126,7 @@ export default {
           label: '创建时间',
           prop: 'dateRange',
           type: 'datetime',
-          range: "daterange",
+          range: true,
         }
       ],
 
@@ -210,8 +213,8 @@ export default {
     },
 
     // 顶部按钮点击事件
-    handleAction(action, selections) {
-      console.log('按钮操作:', action, '选中数据:', selections);
+    handleAction(action, selections, queryParams) {
+      console.log('按钮操作:', action, '选中数据:', selections, '查询参数:', queryParams);
       
       switch (action) {
         case 'add':
@@ -231,10 +234,11 @@ export default {
       console.log('行操作:', action, '当前行:', scope.row);
       
       switch (action) {
+        case 'info':
         case 'view':
           this.handleView(scope.row);
           break;
-        case 'edit':
+        case 'update':
           this.handleEdit(scope.row);
           break;
         case 'delete':
@@ -312,23 +316,6 @@ export default {
       this.$message.info('导出功能开发中...');
     },
 
-    // 行内按钮点击事件
-    handleRowAction(action, scope) {
-      console.log('行操作:', action, '当前行:', scope.row);
-      
-      switch (action) {
-        case 'view':
-          this.handleView(scope.row);
-          break;
-        case 'edit':
-          this.handleEdit(scope.row);
-          break;
-        case 'delete':
-          this.handleDelete(scope.row);
-          break;
-      }
-    },
-
     // 状态切换
     handleStatusChange(row, value) {
       console.log('状态切换:', row, value);
@@ -371,5 +358,11 @@ body {
 .el-main {
   background-color: #f0f2f5;
   padding: 20px;
+}
+
+.container-main {
+    background-color: #fff;
+    margin-bottom: 10px;
+    padding: 15px;
 }
 </style>

@@ -15,24 +15,36 @@
 <template>
 
     <div class="el-crud">
-        <slot name="tabQuery">
-            <div class="top-tab-query">
-            <el-tabs v-if="tabPanes.length > 0" :value="tabQuery.tabKey"
-                @tab-click="handleTabClick">
-                <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabPanes"
-                    :key="item.name"></el-tab-pane>
-            </el-tabs>
-            </div>
-        </slot>
+        <template v-if="tabPanesPosition === 'top'">
+            <slot name="tabQuery">
+                <div class="top-tab-query">
+                    <el-tabs v-if="tabPanes.length > 0" :value="tabQuery.tabKey"
+                        @tab-click="handleTabClick">
+                        <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabPanes"
+                            :key="item.name"></el-tab-pane>
+                    </el-tabs>
+                </div>
+            </slot>
+        </template>
         <!-- 搜索过滤插槽 -->
-        <slot name="query" :queryItems="queryItems" :lineClamp="queryLineClamp" :labelWidth="queryLabelWidth"
-            :inputWidth="queryInputWidth" :inline="queryInline">
+        <slot name="query" :queryItems="queryItems" :lineClamp="queryLineClamp" :labelWidth="queryLabelWidth" :inputWidth="queryInputWidth" :inline="queryInline">
             <query-form ref="queryForm" v-show="showSearch" v-if="queryItems && queryItems.length" :queryItems="queryItems"
                 :lineClamp="queryLineClamp" :label-width="queryLabelWidth" :input-width="queryInputWidth" :inline="queryInline"
                 @queryTable="handleQuery" />
         </slot>
+        
         <div class="container-main">
-            
+            <template v-if="tabPanesPosition === 'container'">
+                <slot name="tabQuery">
+                    <div class="container-tab-query">
+                        <el-tabs v-if="tabPanes.length > 0" :value="tabQuery.tabKey"
+                            @tab-click="handleTabClick">
+                            <el-tab-pane :label="item.label" :name="item.name" v-for="item in tabPanes"
+                                :key="item.name"></el-tab-pane>
+                        </el-tabs>
+                    </div>
+                </slot>
+            </template>
             <!-- 工具条插槽 -->
             <div class="flex justify-between el-crud-toolbar">
                 <slot name="buttons" :selections="selections">
@@ -113,12 +125,17 @@ export default {
             default: true
         },
         buttons: {
-            type: Array | Function,
+            type: [Array, Function],
             default: () => []
         },
         tabPanes: {
             type: Array,
             default: () => []
+        },
+        tabPanesPosition: {
+            type: String,
+            default: 'top',
+            validator: value => ['top', 'container'].includes(value)
         },
         defaultSort: {
             type: Object,
@@ -204,6 +221,7 @@ export default {
                 orderByRule: undefined
             },
             total: 0,
+            refreshRequestId: 0,
 
         }
     },
@@ -215,19 +233,24 @@ export default {
     methods: {
         handleTabClick(tab) {
             this.tabQuery.tabKey = tab.name
-            // this.refresh()
+            this.pagination.pageNum = 1;
             this.orderParams = {
                 orderByRowName: undefined,
                 orderByRule: undefined
             }
-            this.$refs.queryForm?.resetQuery();
+            if (this.$refs.queryForm) {
+                this.$refs.queryForm.resetQuery();
+            } else {
+                this.refresh();
+            }
         },
         handleSelectionChange(e) {
             this.selections = e
         },
         handleQuery(query) {
+            this.pagination.pageNum = 1;
             this.queryParams = query;
-            this.refresh()
+            return this.refresh()
         },
         async handleButtonClick(item) {
             const queryParams = await this.getParams();
@@ -296,19 +319,34 @@ export default {
         },
         // 刷新列表数据
         async refresh() {
+            const requestId = ++this.refreshRequestId;
             this.listLoading = true;
             try {
                 const queryParams = await this.getParams();
+                if (requestId !== this.refreshRequestId) {
+                    return;
+                }
+                if (typeof this.service.page !== 'function') {
+                    throw new Error('Crud service.page must be a function');
+                }
                 const { code, rows, total } = await this.service.page(queryParams);
+                if (requestId !== this.refreshRequestId) {
+                    return;
+                }
                 if (code === 200) {
                     this.data = rows;
                     this.total = total;
                 }
 
             } catch (error) {
-                console.log(error);
+                if (requestId === this.refreshRequestId) {
+                    console.error(error);
+                }
+            } finally {
+                if (requestId === this.refreshRequestId) {
+                    this.listLoading = false;
+                }
             }
-            this.listLoading = false;
         },
         // 删除
         async delete({ row }) {
@@ -343,10 +381,18 @@ export default {
 
 <style scoped lang="scss">
 .top-tab-query {
-    margin-bottom: 0px;
     background-color: #fff;
-    padding: 0 10px;
-
+    padding: 0 15px;
+    &::v-deep {
+        .el-tabs__header {
+            margin: 0;
+        }
+    }
+}
+.container-tab-query{
+    margin-bottom: 10px;
+    margin-top: -10px;
+    background-color: #fff;
     &::v-deep {
         .el-tabs__header {
             margin: 0;

@@ -49,10 +49,10 @@ const TableColumn = {
         hasChildren() {
             return this.column.children && this.column.children.length > 0;
         },
-        // 生成并返回列的属性集合，默认居中对齐
+        // 生成并返回列的属性集合，默认居左对齐
         columnProps() {
             return Object.assign({}, this.column, {
-                align: this.column.align || "center"
+                align: this.column.align || "left"
             });
         },
         // 生成唯一的列 key，用于 Vue 渲染优化

@@ -323,7 +323,6 @@ export default {
 }
 .el-crud-query{
     overflow: hidden;
-    padding: 10px;
     .el-crud-query-form {
         margin-bottom: -10px;
 
