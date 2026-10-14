@@ -36,7 +36,7 @@
     
     -->
     <div class="container-main el-crud-query" v-if="queryItems.length">
-        <el-form :model="queryParams" :size="size" :style="{ maxHeight: expand ? '' : (formMaxHeight + 'px') }"
+        <el-form :model="queryParams" :size="size" :style="{ maxHeight: expand || formMaxHeight === null ? '' : (formMaxHeight + 'px') }"
             ref="queryForm" :inline="inline" :label-width="labelWidthStr" class="el-crud-query-form" @submit.native.prevent>
             <el-form-item v-for="item in queryFormItems" v-show="expand || !item.hidden" :label="item.label"
                 :prop="item.prop" :key="item.prop">
@@ -128,13 +128,14 @@ export default {
         }
     },
     created() {
-         
+        this.$_layoutActive = false;
+        this.$_layoutVersion = 0;
     },
     data() {
         return {
             queryParams: {},
             queryFormItems: [],
-            formMaxHeight: 0,
+            formMaxHeight: null,
             expand: false,
             needExpand: false,
             // 用于展示窗口大小变化绑定
@@ -161,22 +162,14 @@ export default {
         }
     },
     mounted() {
-        this.$nextTick(() => {
-            this.formMaxHeight = this.measureHeight() * this.lineClamp; 
-            // this.handleNeedExpand()
-            this.redraw();
-            this.bindResize();
-            setTimeout(() => {
-                this.$_resizeHandler && this.$_resizeHandler();
-            }, 100);
-            
-        });
-
+        this.bindResize();
+        this.refreshLayout();
     },
     activated() {
         if (!this.$_resizeHandler) {
             this.bindResize();
         }
+        this.refreshLayout();
     },
     beforeDestroy() {
         this.unbindResize();
@@ -187,43 +180,80 @@ export default {
     methods: {
         $_sidebarResizeHandler(e) {
             if (e.propertyName === 'width') {
-                this.$_resizeHandler()
+                this.$_resizeHandler && this.$_resizeHandler()
             }
         },
         // 展示窗口大小变化绑定
         bindResize() {
+            this.$_layoutActive = true;
             this.$_resizeHandler = debounce(() => {
-                this.drawTime = 0;
-                this.queryFormItems.forEach(item => {
-                    item.hidden = false;
-                });
-                this.$nextTick(() => {
-                    this.handleNeedExpand()
-                    this.redraw();
-                })
-
+                this.refreshLayout();
             }, 100)
 
             window.addEventListener('resize', this.$_resizeHandler);
             this.$_sidebarElm = document.getElementsByClassName('sidebar-container')[0]
             this.$_sidebarElm && this.$_sidebarElm.addEventListener('transitionend', this.$_sidebarResizeHandler)
-
-
+            if (typeof ResizeObserver !== 'undefined') {
+                this.$_resizeObserver = new ResizeObserver(entries => {
+                    const { width, height } = entries[0].contentRect;
+                    const visible = width > 0 && height > 0;
+                    if (width !== this.$_observedWidth || visible !== this.$_observedVisible) {
+                        this.$_observedWidth = width;
+                        this.$_observedVisible = visible;
+                        this.$_resizeHandler && this.$_resizeHandler();
+                    }
+                });
+            }
         },
         // unbindResize 
         unbindResize() {
+            this.$_layoutActive = false;
+            this.$_layoutVersion++;
             window.removeEventListener('resize', this.$_resizeHandler)
             this.$_resizeHandler = null
             this.$_sidebarElm && this.$_sidebarElm.removeEventListener('transitionend', this.$_sidebarResizeHandler)
+            this.$_resizeObserver && this.$_resizeObserver.disconnect();
+            this.$_resizeObserver = null;
+            this.$_observedForm = null;
+            this.$_observedWidth = null;
+            this.$_observedVisible = null;
+        },
+        refreshLayout() {
+            if (!this.$_layoutActive) return;
+            const version = ++this.$_layoutVersion;
+            // 先解除上一次折叠，再在可见的 DOM 上测量，避免隐藏页面的零高度污染布局。
+            this.formMaxHeight = null;
+            this.needExpand = false;
+            this.queryFormItems.forEach(item => {
+                this.$set(item, 'hidden', false);
+            });
+            this.$nextTick(() => {
+                if (!this.$_layoutActive || version !== this.$_layoutVersion) return;
+                const form = this.$refs.queryForm?.$el;
+                if (this.$_resizeObserver && form !== this.$_observedForm) {
+                    this.$_resizeObserver.disconnect();
+                    this.$_observedForm = form;
+                    this.$_observedWidth = null;
+                    this.$_observedVisible = null;
+                    if (form) this.$_resizeObserver.observe(form);
+                }
+                if (!form || !form.clientWidth || !form.clientHeight) return;
+                const rowHeight = this.measureHeight();
+                const maxHeight = rowHeight * this.lineClamp;
+                if (!Number.isFinite(maxHeight) || maxHeight <= 0) return;
+                this.formMaxHeight = maxHeight;
+                this.handleNeedExpand();
+                this.redraw(version);
+            });
         },
         handelExpand() {
-            this.drawTime = 0;
             this.expand = !this.expand;
-            this.$_resizeHandler();
+            this.refreshLayout();
 
         },
         handleNeedExpand() {
             const $queryForm = this.$refs?.queryForm?.$el;
+            if (!$queryForm || this.formMaxHeight === null) return;
             let scrollHeight = $queryForm.scrollHeight;
             if ( this.formMaxHeight < scrollHeight) {
                 this.needExpand = true;
@@ -233,28 +263,24 @@ export default {
 
         },
         // 
-        redraw() {
-            if (typeof this.drawTime == 'undefined') {
-                this.drawTime = 0;
-            }
-            if (this.drawTime > 60) {
+        redraw(version = this.$_layoutVersion) {
+            if (!this.$_layoutActive || version !== this.$_layoutVersion || this.expand || this.formMaxHeight === null) {
                 return;
             }
             // 确保DOM完全渲染后再执行某些操作
             const $queryForm = this.$refs?.queryForm?.$el;
-            if ($queryForm) {
-                $queryForm.style.overflow = "hidden";
-            }
+            if (!$queryForm) return;
+            $queryForm.style.overflow = "hidden";
             this.$nextTick(() => {
+                if (!this.$_layoutActive || version !== this.$_layoutVersion || this.expand || !$queryForm.clientWidth || !$queryForm.clientHeight) return;
                 let scrollHeight = $queryForm.scrollHeight;
                 let clientHeight = $queryForm.clientHeight;
                 if (scrollHeight > clientHeight) {
-                    this.drawTime++;
                     let noHiddenItems = this.queryFormItems.filter(item => !item.hidden);
                     let lastItem = noHiddenItems.find((item, index) => (noHiddenItems.length - 1 == index))
                     if (lastItem) {
                         this.$set(lastItem, 'hidden', true);
-                        this.redraw();
+                        this.redraw(version);
                     }
 
                 }
@@ -269,9 +295,10 @@ export default {
         measureHeight() {
             let queryFormBtn = this.$refs.queryFormBtn;
             if(queryFormBtn){
-                let queryFormBtnHeight = queryFormBtn.$el.clientHeight || 29;
-                let queryFormItemsMarginTop = parseInt(window.getComputedStyle(queryFormBtn.$el).marginTop);
-                let queryFormItemsMarginBottom = parseInt(window.getComputedStyle(queryFormBtn.$el).marginBottom);
+                let queryFormBtnHeight = queryFormBtn.$el.clientHeight;
+                if (!queryFormBtnHeight) return;
+                let queryFormItemsMarginTop = parseFloat(window.getComputedStyle(queryFormBtn.$el).marginTop) || 0;
+                let queryFormItemsMarginBottom = parseFloat(window.getComputedStyle(queryFormBtn.$el).marginBottom) || 0;
                 return queryFormBtnHeight + queryFormItemsMarginTop + queryFormItemsMarginBottom
             }
             
@@ -301,7 +328,8 @@ export default {
                     placeholder,
                     hidden: false
                 }
-            }); 
+            });
+            this.refreshLayout();
         },
         resetQuery() {
 
